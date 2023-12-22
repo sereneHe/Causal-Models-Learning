@@ -19,17 +19,10 @@ class Ancpop_Real(object):
 
     Parameters
     ----------
-    method: str, (linear or nonlinear), default='linear'
-        Distribution for standard trainning dataset.
-    File_PATH_Base: str
+    File_PATH: str
         Save file path
-    sem_type: str
-        gauss, exp, gumbel, uniform, logistic (linear);
-        mlp, mim, gp, gp-add, quadratic (nonlinear).
-    nodes: series
-        Notes of samples for standard trainning dataset
-    edges: series
-        Edges of samples for standard trainning dataset
+    File_NAME: str
+        Save file path
     start: int
         Start number of samples for standard trainning dataset
     stop: int
@@ -180,10 +173,9 @@ if __name__ == "__main__":
     ########################### SETTING GAUSS_TYPE, self.File_PATH_Base, nodes, edges, and datasize ##########################
     #File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/Test_Causality_Datasets/Real_data/Telephone/'
     File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/Test_Causality_Datasets/Synthetic datasets/'
-
+    file_name = 'linearGauss_6_15.npz'
     start = 5
     stop = 40
     step = 5
-    file_name = 'linearGauss_6_15.npz'
     rt = Ancpop_Real(File_PATH, file_name, start, stop, step)
     rt.Ancpop_real_Test()
