@@ -10,18 +10,6 @@ from ncpol2sdpa import*
 from math import sqrt
 
 
-import numpy as np
-import pandas as pd
-from sklearn.preprocessing import scale
-from itertools import combinations
-from castle.common import BaseLearner, Tensor
-from castle.common.independence_tests import hsic_test
-from inputlds import*
-from functions import*
-from ncpol2sdpa import*
-from math import sqrt
-
-
 class NCPOLR(object):
     """Estimator based on NCPOP Regressor
 
