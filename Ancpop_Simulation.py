@@ -1,3 +1,15 @@
+import os
+import re
+import csv
+import math
+import time
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+from castle.common import GraphDAG
+from castle.metrics import MetricsDAG
+
 class Ancpop_Simulation(object):
     '''
     A class for simulating random (causal) DAG, where any DAG generator
@@ -270,3 +282,17 @@ class Ancpop_Simulation(object):
         fig.suptitle(title, fontsize=16)
         #plt.title(title, fontdict=None, loc='center', pad=None)
         plt.savefig(self.File_PATH_Heatmaps +'Heatmap_ '+self.filename+'.pdf', bbox_inches='tight')
+
+if __name__ == "__main__":
+    ######################################## SETTING GAUSS_TYPE, self.File_PATH ######################################
+    ########################### SETTING GAUSS_TYPE, self.File_PATH_Base, nodes, edges, and datasize ##########################
+    method = 'nonlinear'
+    File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/'
+    sem_type = 'mlp'
+    nodes = range(6,14,3)
+    edges = range(10,21,5)
+    start = 5
+    stop = 40
+    step = 5
+    rt = Ancpop_Simulation(method, File_PATH, sem_type, nodes, edges, start, stop, step)
+    rt.Ancpop_simulation_Test()
