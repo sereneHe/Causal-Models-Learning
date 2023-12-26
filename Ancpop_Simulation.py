@@ -12,16 +12,14 @@ from castle.metrics import MetricsDAG
 
 class Ancpop_Simulation(object):
     '''
-    A class for simulating random (causal) DAG, where any DAG generator
+    A class for simulating random (causal) DAG based on synthetic datasets, where any DAG generator
     self.method would return the weighed/binary adjacency matrix of a DAG.
-    Besides, we recommend using the python package "NetworkX"
-    to create more structures types.
 
     Parameters
     ----------
     method: str, (linear or nonlinear), default='linear'
         Distribution for standard trainning dataset.
-    File_PATH_Base: str
+    File_PATH: str
         Save file path
     sem_type: str
         gauss, exp, gumbel, uniform, logistic (linear);
@@ -42,9 +40,6 @@ class Ancpop_Simulation(object):
     def __init__(self, method, File_PATH, sem_type, nodes, edges, start, stop, step):
         self.method = method
         self.File_PATH = File_PATH
-        self.printname = self.method.capitalize()+' SEM Samples with ' + self.sem_type.capitalize() +' Noise'
-        self.filename = self.method.capitalize()+'SEM_' + self.sem_type.capitalize() +'Noise'
-        self.File_PATH_Base = self.File_PATH +'Result_'+ self.filename +'/'
         self.sem_type = sem_type
         self.nodes = nodes
         self.edges = edges
@@ -53,12 +48,12 @@ class Ancpop_Simulation(object):
         self.step = step
         self.nodes_num = len(self.nodes)
         self.edges_num = len(self.edges)
-        self.pro_rang = np.arange(self.start, self.stop, self.step)
-        self.obs_rang = np.arange(self.start, self.stop, self.step)
+        self.printname = self.method.capitalize()+' SEM Samples with ' + self.sem_type.capitalize() +' Noise'
+        self.filename = self.method.capitalize()+'SEM_' + self.sem_type.capitalize() +'Noise'
+        self.File_PATH_Base = self.File_PATH +'Result_'+ self.filename +'/'
         self.datasize = range(self.start, self.stop, self.step)
         self.datasize_num = len(self.datasize)
 
-    @staticmethod
     def Ancpop_simulation_Test(self):
         ############################################## Create And Download Dataset ###################################
         self.File_PATH_Details = self.File_PATH_Base + 'Results_Details/'
@@ -68,7 +63,7 @@ class Ancpop_Simulation(object):
         tqdm_csv=os.listdir(self.File_PATH_Details)
         if len(tqdm_csv) != self.nodes_num*self.edges_num* self.datasize_num:
             print('INFO: Simulating '+self.printname +'!')
-            self.Ancpop_simulation_estimate(self, sem_type)
+            self.Ancpop_simulation_estimate(self)
         else:
             print('INFO: Finished '+ self.printname+' simulation!')
 
@@ -109,7 +104,7 @@ class Ancpop_Simulation(object):
 
 
     @staticmethod
-    def Ancpop_simulation_estimate(self, sem_type):
+    def Ancpop_simulation_estimate(self):
         duration_anm_ncpop = []
         f1_anm_ncpop = []
         df = pd.DataFrame(columns=['fdr', 'tpr', 'fpr', 'shd', 'nnz', 'precision', 'recall', 'F1', 'gscore'])
@@ -120,7 +115,7 @@ class Ancpop_Simulation(object):
                     sname = self.method+ '_gauss_'+str(nn)+'nodes_'+str(ne)+'edges_'+str(ds)+'DataSize'
                     path_check = os.path.exists(self.File_PATH_Base + 'Results_Details/' +sname+'.csv')
                     if not path_check:
-                        dataset = IIDSimulation(W=weighted_random_dag, n=ds, method=self.method, sem_type=sem_type)
+                        dataset = IIDSimulation(W=weighted_random_dag, n=ds, method=self.method, sem_type=self.sem_type)
                         true_dag, data = dataset.B, dataset.X
 
                         t_start = time.time()
@@ -190,8 +185,6 @@ class Ancpop_Simulation(object):
 
     @staticmethod
     def Plots_Type_ANCPOP(self, type):
-        self.pro_rang = np.arange(self.start, self.stop, self.step)
-        self.obs_rang = np.arange(self.start, self.stop, self.step)
         if type == 'Nodes':
             type_num = self.nodes_num
             size = self.nodes
@@ -203,8 +196,6 @@ class Ancpop_Simulation(object):
             labels = self.nodes
             yaxes = 'Number of Variables'
         z = [[] for i in range(type_num)]
-        pro_rang = self.pro_rang
-        obs_rang = self.obs_rang
         fig, axes = plt.subplots(nrows=1, ncols=type_num,figsize=(20,4))
         for i in range(type_num):
             read_path = self.File_PATH_Base + 'Results/Summary_'+ type +'_'+str(size[i]) +'.csv'
@@ -235,13 +226,9 @@ class Ancpop_Simulation(object):
 
     @staticmethod
     def Plots_ANCPOP(self):
-        self.pro_rang = np.arange(self.start, self.stop, self.step)
-        self.obs_rang = np.arange(self.start, self.stop, self.step)
         max_num = np.max([self.nodes_num, self.edges_num])
         z = [[[] for i in range(max_num)]for j in range(2)]
         # z[1][2] [[[],[],[]],[[],[],[]]]
-        pro_rang = self.pro_rang
-        obs_rang = self.obs_rang
         fig, axes = plt.subplots(nrows=2, ncols=len(z[0]),figsize=(20,8))
         for j in range(2):
             if j == 0:
@@ -284,15 +271,15 @@ class Ancpop_Simulation(object):
         plt.savefig(self.File_PATH_Heatmaps +'Heatmap_ '+self.filename+'.pdf', bbox_inches='tight')
 
 if __name__ == "__main__":
-    ######################################## SETTING GAUSS_TYPE, self.File_PATH ######################################
-    ########################### SETTING GAUSS_TYPE, self.File_PATH_Base, nodes, edges, and datasize ##########################
+    ###################################################################################################################
+    ########################### SETTING Method, SEM Noise_TYPE, File_PATH, nodes, edges, and datasize ##########################
     method = 'nonlinear'
     File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/'
-    sem_type = 'mlp'
+    sem_type = 'gp-add'
     nodes = range(6,14,3)
     edges = range(10,21,5)
     start = 5
     stop = 40
     step = 5
-    rt = Ancpop_Simulation(method, File_PATH, sem_type, nodes, edges, start, stop, step)
-    rt.Ancpop_simulation_Test()
+    st = Ancpop_Simulation(method, File_PATH, sem_type, nodes, edges, start, stop, step)
+    st.Ancpop_simulation_Test()
