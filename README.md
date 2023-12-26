@@ -16,7 +16,7 @@ Welcome to the repository for causal discovery deliverable 3.2! This codebase en
 4. **Results:** Access all results and figures mentioned in the paper from the `./result` folder. Repeat the results using "ANCPOP_test.ipynb".
 
 ## Running Notebooks
-- **ANCPOP_Simulation_test.ipynb:** Execute this notebook for all experiments on synthetic and real-world data using the ANM_NCPOP approach. Upload datasets and the notebook to [Colab](https://colab.research.google.com/) for seamless execution.
+- **ANCPOP_test.ipynb:** Execute this notebook for all experiments on synthetic and real-world data using the ANM_NCPOP approach. Upload datasets and the notebook to [Colab](https://colab.research.google.com/) for seamless execution.
 
 ## Installation
 To run experiments locally, ensure you have the following dependencies installed:
