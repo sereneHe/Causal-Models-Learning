@@ -14,15 +14,13 @@ class Ancpop_Real(object):
     '''
     A class for simulating random (causal) DAG, where any DAG generator
     self.method would return the weighed/binary adjacency matrix of a DAG.
-    Besides, we recommend using the python package "NetworkX"
-    to create more structures types.
 
     Parameters
     ----------
     File_PATH: str
         Save file path
     File_NAME: str
-        Save file path
+        Read data name
     start: int
         Start number of samples for standard trainning dataset
     stop: int
@@ -40,7 +38,6 @@ class Ancpop_Real(object):
         self.datasize = range(self.start, self.stop, self.step)
         self.datasize_num = len(self.datasize)
         self.sname = re.split("\.", self.File_NAME)[0]
-
 
     def Ancpop_real_Test(self):
         ################################################  Test Data #############################################
@@ -169,13 +166,14 @@ class Ancpop_Real(object):
 
 
 if __name__ == "__main__":
-    ######################################## SETTING GAUSS_TYPE, self.File_PATH ######################################
-    ########################### SETTING GAUSS_TYPE, self.File_PATH_Base, nodes, edges, and datasize ##########################
+    ######################################################################################################################
+    ############################################ SETTING File_PATH, file_name and datasize #############################
     #File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/Test_Causality_Datasets/Real_data/Telephone/'
     File_PATH = '/content/drive/MyDrive/Colab Notebooks/Causality_NotesTest/Test_Causality_Datasets/Synthetic datasets/'
-    file_name = 'linearGauss_6_15.npz'
+
     start = 5
     stop = 40
     step = 5
+    file_name = 'linearGauss_6_15.npz'
     rt = Ancpop_Real(File_PATH, file_name, start, stop, step)
     rt.Ancpop_real_Test()
