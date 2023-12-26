@@ -3,7 +3,7 @@
 Welcome to the repository for causal discovery deliverable 3.2! This codebase encompasses notebooks and test results associated with each figure in the deliverable.
 
 ## Causal Learning Process
-1. **Generate Data:** Use the `IIDSimulation` function in `BuiltinDataSet.py` to create artificial true causal graphs and observation data.
+1. **Generate Data:** Use the `IIDSimulation` function in `Generate Data.py` to create artificial true causal graphs and observation data.
 2. **Learn Structure:** Uncover the causal structure beneath the observation data.
 3. **Visualize Comparison:** Generate heat maps to compare estimated and true graphs.
 4. **Calculate Metrics:** Assess the performance metrics.
