@@ -1,3 +1,10 @@
+## The procedure for causal learning
+### Generate the artificial true causal graph and observation data based on the SCM.
+### Learn the Causal Structure beneath the observation data.
+### Visualize the comparison of estimated/true graphs using a heat map.
+### Calculate Metrics.
+### Demonstrate in a heatmap.
+
 ## Installation
 
 ### Dependencies
