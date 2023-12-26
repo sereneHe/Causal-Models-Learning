@@ -10,7 +10,7 @@ Welcome to the repository for causal discovery deliverable 3.2! This codebase en
 5. **Demonstrate in Heatmap:** Illustrate results in a heatmap for multiple datasets.
 
 ## Getting Started
-1. **Synthetic Data:** Utilize the `Ancpop_Simulation` class to generate custom datasets.
+1. **Synthetic Data:** Utilize the `Ancpop_Synthetic` class to generate custom datasets.
 2. **Real-world Data:** Employ the `Ancpop_Real` class in `Ancpop_Real.py` to test real data from the `./Real data` folder. Alternatively, use generated data in `./Synthetic data`.
 3. **Experiments:** Experiment scripts for proposed methods and baselines are available in Jupyter notebooks named "Methods_withdevice.ipynb".
 4. **Results:** Access all results and figures mentioned in the paper from the `./result` folder. Repeat the results using "ANCPOP_test.ipynb".
