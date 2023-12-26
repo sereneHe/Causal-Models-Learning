@@ -1,27 +1,25 @@
-# Learning Causal Models as a Problem in Non-Commutative Polynomial Optimization
+# Causal Model Learning with Non-Commutative Polynomial Optimization
 
-This repository contains the source code for the causal discovery deliverable 3.2. It includes notebooks and test results corresponding to each figure in the deliverable.
+Welcome to the repository for causal discovery deliverable 3.2! This codebase encompasses notebooks and test results associated with each figure in the deliverable.
 
-## The Procedure for Causal Learning
-1. Generate the artificial true causal graph and observation data based on the SCM.
-2. Learn the causal structure beneath the observation data.
-3. Visualize the comparison of estimated/true graphs using a heat map.
-4. Calculate Metrics.
-5. Demonstrate in a heatmap for multiple data.
+## Causal Learning Process
+1. **Generate Data:** Use the `Ancpop_Simulation` class in `Ancpop_Simulation.py` to create artificial true causal graphs and observation data.
+2. **Learn Structure:** Uncover the causal structure beneath the observation data.
+3. **Visualize Comparison:** Generate heat maps to compare estimated and true graphs.
+4. **Calculate Metrics:** Assess the performance metrics.
+5. **Demonstrate in Heatmap:** Illustrate results in a heatmap for multiple datasets.
 
-## Get Started
-1. **Synthetic Data:** The class `Ancpop_Simulation` in `Ancpop_Simulation.py` can be used to generate your own dataset.
-2. **Real-world Data:** The class `Ancpop_Real` in `Ancpop_Real.py` can be employed to test real data in the folder `./Real Data`. Alternatively, you can also utilize generated data in the folder `./Synthetic data`.
-3. **Experiments:** Experiment scripts for both proposed methods and baselines are provided. Access them through Jupyter notebooks with the name "Methods_withdevice.ipynb".
-4. **Results:** All results and figures mentioned in the paper are under the folder `./result`. Use "ANCPOP_Simulation_test.ipynb" to repeat the results.
+## Getting Started
+1. **Synthetic Data:** Utilize the `Ancpop_Simulation` class to generate custom datasets.
+2. **Real-world Data:** Employ the `Ancpop_Real` class in `Ancpop_Real.py` to test real data from the `./Real Data` folder. Alternatively, use generated data in `./Synthetic data`.
+3. **Experiments:** Experiment scripts for proposed methods and baselines are available in Jupyter notebooks named "Methods_withdevice.ipynb".
+4. **Results:** Access all results and figures mentioned in the paper from the `./result` folder. Repeat the results using "ANCPOP_Simulation_test.ipynb".
 
-## Run Notebooks
-- **ANCPOP_Simulation_test.ipynb:** This notebook contains scripts for all experiments on both synthetic and real-world data using the ANM_NCPOP approach. You can upload datasets and the notebook to Colab [here](https://colab.research.google.com/) and run it.
+## Running Notebooks
+- **ANCPOP_Simulation_test.ipynb:** Execute this notebook for all experiments on synthetic and real-world data using the ANM_NCPOP approach. Upload datasets and the notebook to [Colab](https://colab.research.google.com/) for seamless execution.
 
 ## Installation
-If you want to run experiments locally:
-### Dependencies
-Requires:
+To run experiments locally, ensure you have the following dependencies installed:
 - Python (>= 3.6, <= 3.9)
 - tqdm (>= 4.48.2)
 - NumPy (>= 1.19.1)
@@ -36,9 +34,8 @@ Requires:
 - gcastle (>= 1.0.3)
 
 ### PIP Installation
-If you use Mosek as a solver, a license is required. After applying for a license from Mosek, put "mosek.lic" in Colab Files.
 ```bash
-# To execute the notebook directly in Colab, make sure your MOSEK license file is in one of the locations
+# Execute the following commands to run the notebook directly in Colab. Ensure your MOSEK license file is in one of these locations:
 #
 # /content/mosek.lic   or   /root/mosek/mosek.lic
 #
