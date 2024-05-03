@@ -17,7 +17,7 @@ For two dimensions causality data, all useful infomation is extracted and saved 
 | csv       | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
 | tsv       | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
 
-For more information refer to Data Description Section.
+For more information refer to Input Data Description Section.
 
 ## 2. Synthetic Datasets:<br>
 
@@ -39,6 +39,8 @@ To generate synthetic time series for causality learning, use BuiltinDataSet, ts
 | --------- | ---------------------------------------------------------------------- | --------------------------------------------- | ------------------------- |
 | npz       | 6 Notes 15 Edges Synthetic Data with Additive linear Gauss Noise       | linearGauss_6_15.npz                          | linearGauss_6_15          |
 | npz       | 6 Notes 15 Edges Synthetic Time Series with Additive linear Gauss Noise| linearGauss_6_15_ts.npz                       | linearGauss_6_15_ts       |
+
+For more information refer to Input Data Description Section.
 
 # To get start:<br>
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
