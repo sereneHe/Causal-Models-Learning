@@ -1,5 +1,5 @@
 # Input Data Description:
-## Synthetic Datasets:<br>
+## Real Data:<br>
 -------------------------------------------------------------------------------------------------------------------------
 
 ## 1. Two Dimensions Causality Data<br>
@@ -55,7 +55,6 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 | csv       | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
 | tsv       | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
 
-For more information refer to Data Description Section.
 
 ## Synthetic Datasets:<br>
 -------------------------------------------------------------------------------------------------------------------------
