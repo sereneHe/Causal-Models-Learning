@@ -13,7 +13,7 @@ Causality data with F features, S smples and T timesets Time Series.
 
 **True_dag y:**
 
-causal_matrix array as shape of (F features, F features) - Learned underlying causal relationships between obeservations, according to expert experience or ground true causality. 
+Causal_matrix array as shape of (F features, F features) - Learned underlying causal relationships between obeservations, according to expert experience or ground true causality. 
 
 # Input Data Form:
 ## Two Dimensions Causality Data:
@@ -21,15 +21,15 @@ causal_matrix array as shape of (F features, F features) - Learned underlying ca
 For two dimensions causality data, all useful infomation is extracted and saved as .npz file for further analysis.
 1. **npz file**
 
-storing causality Data as NumPy array x and y under a npz file.
+Storing causality Data as NumPy array x and y under a npz file.
 
 2. **tar.gz file**
 
-archiving and compressing causality files and folders as a tar.gz file.
+Archiving and compressing causality files and folders as a tar.gz file.
 
 3. **csv files**
 
-raw data and casaul matrix are saved as separate csv files.
+Raw data and casaul matrix are saved as separate csv files.
    
 ## Triple-dimensions Causality Data-Multiple Features Time Series:
 
