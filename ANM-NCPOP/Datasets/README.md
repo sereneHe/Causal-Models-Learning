@@ -1,5 +1,7 @@
 # Causal Model Discovery Problems in Learning Joint Multiple Dynamical Systems via Non-Commutative Polynomial Optimization(NCPOP)
 
+data_standardization
+--------------------------------------------------------------------------------------------------------------------
 Welcome to the repository for data standardization in causal discovery!
 
 The data can be any format that is supported by the ANMPOP_ReadData() function, currently including npy, tar.gz, csv and tsv.
@@ -38,3 +40,10 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 1. **tsv files**
 
 Single sample trajectory with multiple features Time Series as shape of (F features, T timeSets) - incluing S smples, i.e. S number of .tsv files
+
+
+
+
+BuiltinDataSet
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+erdos_renyi function Set Gauss_linear/Nonlinear, nodes, edges and DataSize
