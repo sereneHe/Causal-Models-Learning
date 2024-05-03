@@ -25,5 +25,5 @@ raw data and casaul matrix are saved as separate csv files.
    
 Triple-dimensions Causality Data-Multiple Features Time Series:
 For multiple features time series data, all ts will be saved as a Feature_num * Sample_num * Time three dimension array for applying ANM-NCPOP.
-**tsv files**
+1. **tsv files**
 Single sample trajectory with multiple features Time Series as shape of (F features, T timeSets) - incluing S smples, i.e. S number of .tsv files
