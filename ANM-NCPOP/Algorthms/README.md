@@ -46,12 +46,12 @@ Raw data:<br>
 Casaul matrix:<br>
 Test File Name: Krebs_Cycle_TS/series1713874182190.tsv, series_list.csv <br>
 Test codes: file_name = Krebs_Cycle<br>
-| File Type   | Example Data                                                    | Test File Name                             | File Name              |
-| ----------- | --------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
-| 1.1. npz    | 6 Notes 15 Edges Synthetic Data With Additive linear Gauss Noise| linearGauss_6_15.npz                       | linearGauss_6_15       |
-| 1.2. tar.gz | 18V_55N_Wireless Data                                           | 18V_55N_Wireless.tar.gz                    | 18V_55N_Wireless       |
-| 1.3. csv    | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
-| 2.1. tsv    | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
+| File Type      | Example Data                                                    | Test File Name                             | File Name              |
+| -------------- | --------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| 1.1. npz       | 6 Notes 15 Edges Synthetic Data With Additive linear Gauss Noise| linearGauss_6_15.npz                       | linearGauss_6_15       |
+| 1.2. tar.gz    | 18V_55N_Wireless Data                                           | 18V_55N_Wireless.tar.gz                    | 18V_55N_Wireless       |
+| 1.3. csv       | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
+| 2.1. tsv       | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
 
 For more information refer to Input Data Discription Section above.
 
