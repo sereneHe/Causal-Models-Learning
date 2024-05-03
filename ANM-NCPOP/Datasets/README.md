@@ -2,14 +2,16 @@
 
 Welcome to the repository for data standardization in causal discovery!
 
+The data can be any format that is supported by the ANMPOP_ReadData() function, currently including npy, tar.gz, csv and tsv.
+
 ## Standardized Data Form:
 # Causality Data stored as NumPy array x and y under a npz file.
 
 **Raw_data x:**
-Causality data with F Features, S smples and T timesets Time Series.
+Causality data with F features, S smples and T timesets Time Series.
 
 **True_dag y:**
-causal_matrix : array as shape of (n_features, n_features) Learned underlying causal relationships, according to expert experience or ground true causality. 
+causal_matrix array as shape of (F features, F features) - Learned underlying causal relationships between obeservations, according to expert experience or ground true causality. 
 
 ## Two Dimensions Causality Data:
 # For two dimensions causality data, all useful infomation is extracted and saved as .npz file for further analysis.
@@ -18,5 +20,6 @@ causal_matrix : array as shape of (n_features, n_features) Learned underlying ca
 3. **csv files**raw data and casaul matrix are saved as separate csv files.
    
 ## Triple-dimensions Causality Data-Multiple Features Time Series:
-# For multiple features time series data, all ts will be saved as a Feature_num*Sample_num*Time three dimension array for applying ANM-NCPOP.
-1. **.tsv files**storing causality Data as NumPy array x and y under a npz file.
+# For multiple features time series data, all ts will be saved as a Feature_num * Sample_num * Time three dimension array for applying ANM-NCPOP.
+**tsv files**
+Single sample trajectory with multiple features Time Series as shape of (F features, T timeSets) - incluing S smples, i.e. S number of .tsv files
