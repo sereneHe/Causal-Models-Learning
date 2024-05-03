@@ -1,6 +1,10 @@
+# Algorithm Discription:<br>
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ![ANM-NCPOP](/images/logo.png)
 
 # Input Data Discription:<br>
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 ## 1. Two Dimensions Causality Data:<br>
 
 For two dimensions causality data, all useful infomation is extracted and saved as .npz file for further analysis.<br>
@@ -50,7 +54,6 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 - Test File Name: Krebs_Cycle_TS/series1713874182190.tsv, ..., series_list.csv <br>
 - Test codes: 'file_name = Krebs_Cycle'<br>
 
------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Summary Table<br>
 
 | File Type      | Example Data                                                    | Test File Name                             | File Name              |
@@ -61,4 +64,7 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 | 2.1. tsv       | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
 
 For more information refer to Input Data Discription Section above.
+
+# To get start:<br>
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
