@@ -1,16 +1,16 @@
-# Input Data Form:<br>
+# Input Data Discription:<br>
 ## 1. Two Dimensions Causality Data:<br>
 
 For two dimensions causality data, all useful infomation is extracted and saved as .npz file for further analysis.<br>
 1.1. **npz file**<br>
-Example: linearGauss_6_15.npz<br>
+Example: linearGaussWith6Notes15Edges Data<br>
 Raw data: x<br>
 Casaul matrix: y<br>
 Test File Name: linearGauss_6_15.npz<br>
 Test codes: file_name = linearGauss_6_15<br>
 
 1.2. **tar.gz file**<br>
-Example: 18V_55N_Wireless.tar.gz<br>
+Example: 18V_55N_Wireless Data<br>
 Raw data: 18V_55N_Wireless/Alarm.csv<br>
 Casaul matrix: 18V_55N_Wireless/DAG.npy<br>
 Test File Name: 18V_55N_Wireless.tar.gz<br>
@@ -46,7 +46,12 @@ Raw data:<br>
 Casaul matrix:<br>
 Test File Name: Krebs_Cycle_TS/series1713874182190.tsv, series_list.csv <br>
 Test codes: file_name = Krebs_Cycle<br>
-| 列1      | 列2      | 列3      |
-| -------- | -------- | -------- |
-| 内容1    | 内容2    | 内容3    |
-| 内容4    | 内容5    | 内容6    |
+| File Type   | Example Data                                                    | Test File Name                             | File Name              |
+| ----------- | --------------------------------------------------------------- | ------------------------------------------ | ---------------------- |
+| 1.1. npz    | 6 Notes 15 Edges Synthetic Data With Additive linear Gauss Noise| linearGauss_6_15.npz                       | linearGauss_6_15       |
+| 1.2. tar.gz | 18V_55N_Wireless Data                                           | 18V_55N_Wireless.tar.gz                    | 18V_55N_Wireless       |
+| 1.3. csv    | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
+| 2.1. tsv    | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
+
+For more information refer to Input Data Discription Section above.
+
