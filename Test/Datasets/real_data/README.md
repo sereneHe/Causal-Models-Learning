@@ -1,4 +1,4 @@
-# Input Data Description:
+# Data Description:
 ## Synthetic Datasets:<br>
 -------------------------------------------------------------------------------------------------------------------------
 
@@ -54,5 +54,4 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 | tar.gz    | 18V_55N_Wireless Data                                           | 18V_55N_Wireless.tar.gz                    | 18V_55N_Wireless       |
 | csv       | Process Data                                                    | real_dataset_processed.csv, true_graph.csv | real_dataset_processed |
 | tsv       | Krebs_Cycle Time Series                                         | series_list.csv, Krebs_Cycle_TS Folder     | Krebs_Cycle            | 
-
-For more information refer to Data Description Section.
+.
