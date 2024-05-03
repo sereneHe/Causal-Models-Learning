@@ -22,7 +22,8 @@ MULTI_ANM_NCPO.py<br>
 BuiltinDataSet.py<br>
 ts_generation.py<br>
 data_generation.py<br> 
-standardize input data<br>
+data_standardisation<br>
+BuiltinTS_generation.py<br> 
 
 # Plot codes<br>
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
