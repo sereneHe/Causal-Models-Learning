@@ -30,19 +30,19 @@ For multiple features time series data, all ts will be saved as a (Feature_num, 
 2.1. **tsv files**
 Example: Krebs_Cycle Time Series
 Raw data:
-          Single sample trajectory with multiple features Time Series as shape of (F features, T timeSets) - incluing S smples, i.e. S number of .tsv files
-          2.1.1. **Series List**
-          series_list.csv file incluing a column with column_name = Series_num
-          2.1.2. **Series Folder**
-          Krebs_Cycle_TS/
-          series1713874182190.tsv
-          series1713874227485.tsv
-          series1713874308802.tsv
-          series1713874376137.tsv
-          series1713874426151.tsv
-          series1713874555527.tsv
-          series1713874613984.tsv
+          Single sample trajectory with multiple features Time Series as shape of (F features, T timeSets) - incluing S smples, i.e. S number of .tsv files<br>
+          2.1.1. **Series List**<br>
+          series_list.csv file incluing a column with column_name = Series_num<br>
+          2.1.2. **Series Folder**<br>
+          Krebs_Cycle_TS/<br>
+          series1713874182190.tsv<br>
+          series1713874227485.tsv<br>
+          series1713874308802.tsv<br>
+          series1713874376137.tsv<br>
+          series1713874426151.tsv<br>
+          series1713874555527.tsv<br>
+          series1713874613984.tsv<br>
 
 Casaul matrix:
-Test File Name: Krebs_Cycle_TS/series1713874182190.tsv, series_list.csv 
+Test File Name: Krebs_Cycle_TS/series1713874182190.tsv, series_list.csv <br>
 Test codes: file_name = Krebs_Cycle
