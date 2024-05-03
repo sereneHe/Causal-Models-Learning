@@ -16,7 +16,7 @@ Causality data with F features, S smples and T timesets Time Series.
 causal_matrix array as shape of (F features, F features) - Learned underlying causal relationships between obeservations, according to expert experience or ground true causality. 
 
 # Input Data Form:
-Two Dimensions Causality Data:
+## Two Dimensions Causality Data:
 
 For two dimensions causality data, all useful infomation is extracted and saved as .npz file for further analysis.
 1. **npz file**
@@ -31,7 +31,7 @@ archiving and compressing causality files and folders as a tar.gz file.
 
 raw data and casaul matrix are saved as separate csv files.
    
-Triple-dimensions Causality Data-Multiple Features Time Series:
+## Triple-dimensions Causality Data-Multiple Features Time Series:
 
 For multiple features time series data, all ts will be saved as a (Feature_num, Sample_num, Time) three dimension array for applying ANM-NCPOP.
 
