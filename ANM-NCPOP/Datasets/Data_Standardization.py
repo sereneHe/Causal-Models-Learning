@@ -110,6 +110,7 @@ class ANMPOP_ReadData(object):
                 for ns in range(n):  
                     X = pd.read_csv(self.TS_path+ TS_List[ns], delimiter='\t', index_col=0, header=None) 
                     Raw_data[ns, :] = np.transpose(X)
+                print(Raw_data.shape)    
                 # save numpy to npz file
                 matrix = np.zeros((d, d))
                 np.fill_diagonal(matrix, 0)
