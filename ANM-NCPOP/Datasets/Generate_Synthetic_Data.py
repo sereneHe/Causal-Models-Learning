@@ -2,8 +2,9 @@ from BuiltinDataSet import DAG
 import numpy as np
 import networkx as nx
 import logging
+# from Generate_SyntheticData import*
 
-class ANMNCPOP_GenerateData(object):
+class GenerateData(object):
     '''
     Simulate IID datasets for causal structure learning.
 
@@ -29,10 +30,10 @@ class ANMNCPOP_GenerateData(object):
 
         self.B = (W != 0).astype(int)
         if method == 'linear':
-            self.XX = ANMNCPOP_GenerateData._simulate_linear_sem(
+            self.XX = GenerateData._simulate_linear_sem(
                     W, n, T, sem_type, noise_scale)
         elif method == 'nonlinear':
-            self.XX = ANMNCPOP_GenerateData._simulate_nonlinear_sem(
+            self.XX = GenerateData._simulate_nonlinear_sem(
                     W, n, T, sem_type, noise_scale)
         logging.info('Finished synthetic dataset')
 
@@ -185,7 +186,7 @@ class ANMNCPOP_GenerateData(object):
             if len(noise_scale) != d:
                 raise ValueError('noise scale must be a scalar or has length d')
             scale_vec = noise_scale
-        X = np.zeros([T, d])  
+        X = np.zeros([T, d])
         XX = np.zeros((T, n, d))
         G_nx =  nx.from_numpy_array(B, create_using=nx.DiGraph)
         ordered_vertices = list(nx.topological_sort(G_nx))
@@ -197,4 +198,3 @@ class ANMNCPOP_GenerateData(object):
             XX[:, ns] = X
 
         return XX
-
