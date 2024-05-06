@@ -19,11 +19,9 @@ Test_MULTI_ANM_NCPO.py<br>
 
 # Data codes<br>
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-Test_BuiltinDataSet.py<br>
-Test_ts_generation.py<br>
-Test_data_generation.py<br> 
-Test_data_standardisation.py<br>
-Test_TS_generation.py<br> 
+Synthetic_Data_Generation.ipynb<br>
+Real_Data_Standardization.ipynb<br>
+ANMNCPOP_TS.ipynb<br> 
 
 # Plot codes<br>
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
