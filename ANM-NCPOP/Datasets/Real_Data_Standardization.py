@@ -7,7 +7,7 @@ import pandas as pd
 import tarfile
 from itertools import combinations
 
-class ANMPOP_ReadData(object):
+class Real_Data_Standardization(object):
     '''
     A class for preparing data to simulate random (causal) DAG.
 
@@ -75,7 +75,7 @@ class ANMPOP_ReadData(object):
 
                 Raw_data = pd.read_csv(self.File_PATH+file_names[1])
                 true_dag = np.load(self.File_PATH+file_names[2])
-                
+
                 # save numpy to npz file
                 np.savez(self.File_PATH + self.Data_NAME+'.npz', x=Raw_data , y=true_dag)
                 print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')
@@ -100,23 +100,30 @@ class ANMPOP_ReadData(object):
                 else:
                     print('INFO: Start Analyzing '+ self.Data_NAME + ' Time Series List!')
                     TS_List = Read_Timeseries['Series_num']
-                lds = pd.read_csv(self.TS_path+ TS_List[0], delimiter='\t', index_col=0, header=None) 
+                lds = pd.read_csv(self.TS_path+ TS_List[0], delimiter='\t', index_col=0, header=None)
                 # print(lds)
-                n = len(TS_List)               
+                n = len(TS_List)
                 T = lds.shape[1]
-                d = lds.shape[0]
+                # d = lds.shape[0]
                 # print(d, T, n)
-                Raw_data = np.zeros((n, T, d))
-                for ns in range(n):  
-                    X = pd.read_csv(self.TS_path+ TS_List[ns], delimiter='\t', index_col=0, header=None) 
-                    Raw_data[ns, :] = np.transpose(X)
-                print(Raw_data.shape)    
+                df = np.transpose(lds)
+                feature_name = df.columns
+                d = len(feature_name)
+                Raw_data = np.zeros((d, n, T))
+                for ns in range(n):
+                    X = pd.read_csv(self.TS_path+ TS_List[ns], delimiter='\t', index_col=0, header=None)
+                    df = np.transpose(X)
+                    feature_name = df.columns
+                    for fn in range(d):
+                        Raw_data[fn, ns, :] = list(df[feature_name[fn]])
+                # print(Raw_data.shape)
                 # save numpy to npz file
                 matrix = np.zeros((d, d))
                 np.fill_diagonal(matrix, 0)
                 np.fill_diagonal(matrix[:, 1:], 1)
                 np.savez(self.File_PATH + self.Data_NAME+'.npz', x=Raw_data , y=matrix)
                 print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')
-            
+
             else:
                 print('INFO: Wrong DataType!')
+                
