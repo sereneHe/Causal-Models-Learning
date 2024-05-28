@@ -6,6 +6,7 @@ from pickle import TRUE
 from random import sample
 from copy import deepcopy
 from tqdm import tqdm
+from BuiltinDataSet import DAG
 import numpy as np
 import pandas as pd
 import networkx as nx
