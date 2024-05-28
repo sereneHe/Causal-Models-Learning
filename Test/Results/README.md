@@ -1,5 +1,7 @@
 # Results Discription:
-We collected results from Learning Joint Multiple Dynamical Systems via Non-Commutative Polynomial Optimization(NCPOP), including
+These are results for Learning Joint Multiple Dynamical Systems via Non-Commutative Polynomial Optimization(NCPOP). We generated nonlinear(or linear)synthetic data based on various nodes(6, 9, 12) and edges (10, 15, 20), tested F1 score for time window length between 5-35 sequentially, and demonstrated the results on a heatmap.
+
+# Results:
 * Linear_Synthetic_Heatmap.pdf
 * Nonlinear_Synthetic_Heatmap.pdf
 
