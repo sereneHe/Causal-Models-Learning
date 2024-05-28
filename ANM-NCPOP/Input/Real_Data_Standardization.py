@@ -12,11 +12,32 @@ class Real_Data_Standardization(object):
     A class for preparing data to simulate random (causal) DAG.
 
     Parameters
-    ----------
+    ------------------------------------------------------------------------------------------------
     File_PATH: str
-        Read file path
+               Read file path
     File_NAME: str
-        Read data name
+               Read data name
+
+    Returns
+    ------------------------------------------------------------------------------------------------
+    Raw_data: npz
+            x：[d, n, T] sample time series 
+            y: true_dag
+
+    Examples
+    -------------------------------------------------------------------------------------------------
+    >>> File_PATH = "Test/Datasets/Real_data/Telephone/"
+    >>> file_name = 'Telephone'
+
+    >>> File_PATH = "Test/Datasets/Real_data/Microwave/"
+    >>> file_name = '25V_474N_Microwave'
+
+    >>> Krebs_Cycle
+    >>> File_PATH = "Test/Datasets/Synthetic_data/Kreb_Cycles/"
+    >>> file_name = 'Krebs_Cycle'
+
+    >>> dt = Real_Data_Standardization(File_PATH, file_name)
+    >>> dt.Produce_Rawdata()
     '''
 
     def __init__(self, File_PATH, Data_NAME):
