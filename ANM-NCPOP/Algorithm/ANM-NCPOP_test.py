@@ -22,8 +22,7 @@ from castle.metrics import MetricsDAG
 
 class Ancpop_Real(object):
     '''
-    A class for simulating random (causal) DAG, where any DAG generator
-    self.method would return the weighed/binary adjacency matrix of a DAG.
+    A class for simulating (causal) DAG, where the true DAG is a weighed/binary adjacency matrix based on ground truth.
 
     Parameters
     ----------
