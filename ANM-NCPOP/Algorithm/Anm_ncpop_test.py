@@ -42,7 +42,7 @@ class Anm_ncpop_test(object):
     >>> File_PATH_Summary_Datails = 'Test/Examples/Test_data/Summary'
     >>> file_name = 'linearGauss_6_15_TS.npz'
     >>> # file_name = 'Krebs_Cycle_16_43_TS.npz'
-    >>> rt = Anm_ncpop_test(File_PATH, file_name, datasize, Timesize)
+    >>> rt = Anm_ncpop_test(File_PATH, file_name, File_PATH_Summary_Datails, datasize, Timesize)
     >>> rt.Ancpop()
 
     '''
