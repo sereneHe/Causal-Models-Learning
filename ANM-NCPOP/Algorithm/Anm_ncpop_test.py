@@ -46,11 +46,11 @@ class Anm_ncpop_test(object):
     >>> rt.Ancpop()
 
     '''
-    def __init__(self, File_PATH, File_NAME, File_PATH_Summary_Datails, datasize, Timesize):
+    def __init__(self, File_PATH, File_NAME, File_PATH_Summary_Datails, Datasize, Timesize):
         self.File_PATH = File_PATH
         self.File_PATH_Summary_Datails = File_PATH_Summary_Datails
         self.File_NAME = File_NAME
-        self.Datasize =  datasize
+        self.Datasize =  Datasize
         self.Datasize_num = len(self.datasize)
         self.Timesize = Timesize
         self.Timesize_num = len(self.Timesize)
