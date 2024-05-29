@@ -58,8 +58,20 @@ class Generate_Synthetic_Data(object):
     >>> nodes = range(6,15,3)
     >>> edges = range(10,20,5)
     >>> T=200
+    >>> num_datasets = 120
     >>> File_PATH = 'Test/'
     >>> _ts = Generate_Synthetic_Data(File_PATH, n=num_datasets, T, method, sem_type, nodes, edges)
+
+    >>> noise_type = {
+    >>>     'nonlinear': ['gp-add','mlp', 'mim', 'gp', 'quadratic'],
+    >>>     'linear':  ['gauss', 'exp', 'gumbel', 'uniform', 'logistic']
+    >>> }
+    >>> sem_type = ['nonlinear', 'linear'] 
+    >>> for m in sem_type :
+    >>>   for s in noise_type[m]:
+    >>>     for n in nodes:
+    >>>       for e in edges:
+    >>>         Generate_Synthetic_Data(File_PATH, n=num_datasets, T, m, s, n, e)
     '''
 
     def __init__(self, File_PATH, n=1000, T=20, method='linear', sem_type='gauss', nodes, edges, noise_scale=1.0):
