@@ -48,6 +48,7 @@ class Generate_Synthetic_Data(object):
     Raw_data: npz
             x：[d, n, T] sample time series 
             y: true_dag
+    File_PATH_Datasets: Route of saving test data
 
     Examples
     -------------------------------------------------------------------------------------------------
