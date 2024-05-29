@@ -27,8 +27,8 @@ class Generate_Synthetic_Data(object):
 
     Parameters
     ------------------------------------------------------------------------------------------------
-    W: np.ndarray
-        Weighted adjacency matrix for the target causal graph.
+    File_PATH
+        save route
     n: int
         Number of samples for standard trainning dataset.
     T: int
@@ -38,11 +38,11 @@ class Generate_Synthetic_Data(object):
     sem_type: str
         gauss, exp, gumbel, uniform, logistic (linear);
         mlp, mim, gp, gp-add, quadratic (nonlinear).
-    noise_scale: float
-        Scale parameter of noise distribution in linear SEM.
-
-    A class for preparing data to simulate random (causal) DAG.
-
+    nodes: series
+        Notes of samples for standard trainning dataset.
+    edges: series
+        Edges of samples for standard trainning dataset.
+        
     Returns
     ------------------------------------------------------------------------------------------------
     Raw_data: npz
@@ -53,41 +53,56 @@ class Generate_Synthetic_Data(object):
     -------------------------------------------------------------------------------------------------
     >>> method = 'linear'
     >>> sem_type = 'gauss'
-    >>> num_nodes = 6
-    >>> num_edges = 15
-    >>> num_datasets = 100
+    >>> nodes = range(6,15,3)
+    >>> edges = range(10,20,5)
     >>> T=200
-    
-    >>> # Two dimensions training data
-    >>> true_graph_matrix = DAG.erdos_renyi(n_nodes=10, n_edges=10)
-    >>> topology_matrix = Topology.erdos_renyi(n_nodes=20, n_edges=20)
-    >>> simulator = THPSimulation(true_graph_matrix, topology_matrix,
-    >>>                               mu_range=(0.00005, 0.0001),
-    >>>                               alpha_range=(0.005, 0.007))
-    >>> _data = simulator.simulate(T=25000, max_hop=2)
-    
-    >>> # Three dimensions training data
-    >>> weighted_random_dag = DAG.erdos_renyi(n_nodes=num_nodes, n_edges=num_edges, seed=1)
-    >>> _timeseries = Generate_Synthetic_Data(W=weighted_random_dag, n=num_datasets, T=20, method=method, sem_type=sem_type)
-    
+    >>> File_PATH = 'Test/'
+    >>> _ts = Generate_Synthetic_Data(File_PATH, n=num_datasets, T, method, sem_type, nodes, edges)
     '''
 
-    def __init__(self, W, n=1000, T=20, method='linear',
-                 sem_type='gauss', noise_scale=1.0):
+    def __init__(self, File_PATH, n=1000, T=20, method='linear', sem_type='gauss', nodes, edges, noise_scale=1.0):
+        nodes_num = len(nodes)
+        edges_num = len(edges)
+                
+        ############################################## Create Artificial Dataset ###################################
+        filename = method.capitalize()+'SEM_' + sem_type.capitalize() +'Noise'
+        File_PATH_Base = File_PATH +'Results_'+ filename +'/'
+        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
+        if not os.path.exists(self.File_PATH_Datasets):
+            os.makedirs(self.File_PATH_Datasets)
+        print('ANM-NCPOP INFO: Created Datasets_'+ method.capitalize()+ ' File!')
 
-        self.B = (W != 0).astype(int)
-        if method == 'linear':
-            self.XX = Generate_SyntheticData._simulate_linear_sem(
-                    W, n, T, sem_type, noise_scale)
-        elif method == 'nonlinear':
-            self.XX = Generate_SyntheticData._simulate_nonlinear_sem(
-                    W, n, T, sem_type, noise_scale)
-            
-        num_nodes = len(W)
-        num_edges = np.count_nonzero(W)
-        file_name = method + sem_type.capitalize()+'_'+str(num_nodes)+'_'+str(num_edges)+'_TS.npz'
-        np.savez(file_name, x=self.XX, y=self.B)
-        logging.info('Finished synthetic dataset')
+        count = 0
+        tqdm_csv=os.listdir(self.File_PATH_Datasets)
+        if len(tqdm_csv) != nodes_num* edges_num:
+            print('ANM-NCPOP INFO: Generating '+ printname + ' Dataset!')
+            if method == 'linear':
+                for nn in nodes:
+                    for ne in edges:
+                        count = count +1
+                        w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
+                        self.B = (W != 0).astype(int)
+                        self.XX = GenerateData._simulate_linear_sem(W, n, T, sem_type, noise_scale)
+                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
+                        logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
+                        print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
+                print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
+            elif method == 'nonlinear':
+                for nn in nodes:
+                    for ne in edges:
+                        count = count +1
+                        w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
+                        self.B = (W != 0).astype(int)
+                        self.XX = GenerateData._simulate_nonlinear_sem(W, n, T, sem_type, noise_scale)
+                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
+                        logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
+                        print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
+                print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
+
+        else:
+            print('ANM-NCPOP INFO: Finished '+ printname+' dataset generation!')
 
     @staticmethod
     def _simulate_linear_sem(W, n, T, sem_type, noise_scale):
