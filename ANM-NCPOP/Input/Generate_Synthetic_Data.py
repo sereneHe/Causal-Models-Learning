@@ -28,26 +28,28 @@ class Generate_Synthetic_Data(object):
     Parameters
     ------------------------------------------------------------------------------------------------
     File_PATH
-        save route
+            save route
     n: int
-        Number of samples for standard trainning dataset.
+            Number of samples for standard trainning dataset.
     T: int
-        Number of timeseries for standard trainning dataset.
+            Number of timeseries for standard trainning dataset.
     method: str, (linear or nonlinear), default='linear'
-        Distribution for standard trainning dataset.
+            Distribution for standard trainning dataset.
     sem_type: str
-        gauss, exp, gumbel, uniform, logistic (linear);
-        mlp, mim, gp, gp-add, quadratic (nonlinear).
+            gauss, exp, gumbel, uniform, logistic (linear);
+            mlp, mim, gp, gp-add, quadratic (nonlinear).
     nodes: series
-        Notes of samples for standard trainning dataset.
+            Notes of samples for standard trainning dataset.
     edges: series
-        Edges of samples for standard trainning dataset.
+            Edges of samples for standard trainning dataset.
         
     Returns
     ------------------------------------------------------------------------------------------------
     Raw_data: npz
             x：[d, n, T] sample time series 
             y: true_dag
+    File_PATH_Datasets: 
+            Route of saving test data
 
     Examples
     -------------------------------------------------------------------------------------------------
