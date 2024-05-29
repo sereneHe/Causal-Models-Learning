@@ -76,12 +76,12 @@ class Generate_Synthetic_Data(object):
 
         count = 0
         tqdm_csv=os.listdir(self.File_PATH_Datasets)
-        if len(tqdm_csv) != nodes_num* edges_num:
+        while len(tqdm_csv) != nodes_num* edges_num:
             print('ANM-NCPOP INFO: Generating '+ printname + ' Dataset!')
             if method == 'linear':
                 for nn in nodes:
                     for ne in edges:
-                        count = count +1
+                        count += 1
                         w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
                         self.B = (W != 0).astype(int)
                         self.XX = GenerateData._simulate_linear_sem(W, n, T, sem_type, noise_scale)
@@ -102,9 +102,7 @@ class Generate_Synthetic_Data(object):
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
                 print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-
-        else:
-            print('ANM-NCPOP INFO: Finished '+ printname+' dataset generation!')
+        print('ANM-NCPOP INFO: Finished '+ printname+' dataset generation!')
 
     @staticmethod
     def _simulate_linear_sem(W, n, T, sem_type, noise_scale):
