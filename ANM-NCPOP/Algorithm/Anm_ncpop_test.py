@@ -40,8 +40,8 @@ class Anm_ncpop_test(object):
     >>> Timesize = range(3, 6, 1)
     >>> File_PATH = 'Test/Examples/Test_data/'
     >>> File_PATH_Summary_Datails = 'Test/Examples/Test_data/Summary'
-    >>> file_name = 'linearGauss_6_15_TS.npz'
-    >>> # file_name = 'Krebs_Cycle_16_43_TS.npz'
+    >>> file_name = 'LinearSEM_GaussNoise_6Nodes_15Edges_TS.npz'
+    >>> # file_name = 'Krebs_Cycle_16Nodes_43Edges_TS.npz'
     >>> rt = Anm_ncpop_test(File_PATH, file_name, File_PATH_Summary_Datails, datasize, Timesize)
     >>> rt.Ancpop()
 
