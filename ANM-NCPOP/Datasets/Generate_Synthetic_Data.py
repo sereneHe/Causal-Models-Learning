@@ -1,34 +1,18 @@
-# from Generate_SyntheticData import*
-from networkx.algorithms import bipartite
-from scipy.special import expit as sigmoid
-from itertools import combinations
-from pickle import TRUE
-from random import sample
-from copy import deepcopy
-from tqdm import tqdm
+
 from BuiltinDataSet import DAG
 import numpy as np
-import pandas as pd
 import networkx as nx
 import logging
-import tarfile
-import os
-import re
-import random
+# from Generate_SyntheticData import*
 
-
-def set_random_seed(seed):
-    random.seed(seed)
-    np.random.seed(seed)
-
-class Generate_Synthetic_Data(object):
+class GenerateData(object):
     '''
     Simulate IID datasets for causal structure learning.
 
     Parameters
-    ------------------------------------------------------------------------------------------------
-    File_PATH
-        save route
+    ----------
+    W: np.ndarray
+        Weighted adjacency matrix for the target causal graph.
     n: int
         Number of samples for standard trainning dataset.
     T: int
@@ -38,72 +22,21 @@ class Generate_Synthetic_Data(object):
     sem_type: str
         gauss, exp, gumbel, uniform, logistic (linear);
         mlp, mim, gp, gp-add, quadratic (nonlinear).
-    nodes: series
-        Notes of samples for standard trainning dataset.
-    edges: series
-        Edges of samples for standard trainning dataset.
-        
-    Returns
-    ------------------------------------------------------------------------------------------------
-    Raw_data: npz
-            x：[d, n, T] sample time series 
-            y: true_dag
-    File_PATH_Datasets: Route of saving test data
-
-    Examples
-    -------------------------------------------------------------------------------------------------
-    >>> method = 'linear'
-    >>> sem_type = 'gauss'
-    >>> nodes = range(6,15,3)
-    >>> edges = range(10,20,5)
-    >>> T=200
-    >>> File_PATH = 'Test/'
-    >>> _ts = Generate_Synthetic_Data(File_PATH, n=num_datasets, T, method, sem_type, nodes, edges)
+    noise_scale: float
+        Scale parameter of noise distribution in linear SEM.
     '''
 
-    def __init__(self, File_PATH, n=1000, T=20, method='linear', sem_type='gauss', nodes, edges, noise_scale=1.0):
-        nodes_num = len(nodes)
-        edges_num = len(edges)
-                
-        ############################################## Create Artificial Dataset ###################################
-        filename = method.capitalize()+'SEM_' + sem_type.capitalize() +'Noise'
-        File_PATH_Base = File_PATH +'Results_'+ filename +'/'
-        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
-        if not os.path.exists(self.File_PATH_Datasets):
-            os.makedirs(self.File_PATH_Datasets)
-        print('ANM-NCPOP INFO: Created Datasets_'+ method.capitalize()+ ' File!')
+    def __init__(self, W, n=1000, T=20, method='linear',
+                 sem_type='gauss', noise_scale=1.0):
 
-        count = 0
-        tqdm_csv=os.listdir(self.File_PATH_Datasets)
-        if len(tqdm_csv) != nodes_num* edges_num:
-            print('ANM-NCPOP INFO: Generating '+ printname + ' Dataset!')
-            if method == 'linear':
-                for nn in nodes:
-                    for ne in edges:
-                        count = count +1
-                        w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
-                        self.B = (W != 0).astype(int)
-                        self.XX = GenerateData._simulate_linear_sem(W, n, T, sem_type, noise_scale)
-                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
-                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
-                        logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
-                        print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
-                print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-            elif method == 'nonlinear':
-                for nn in nodes:
-                    for ne in edges:
-                        count = count +1
-                        w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
-                        self.B = (W != 0).astype(int)
-                        self.XX = GenerateData._simulate_nonlinear_sem(W, n, T, sem_type, noise_scale)
-                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
-                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
-                        logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
-                        print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
-                print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-
-        else:
-            print('ANM-NCPOP INFO: Finished '+ printname+' dataset generation!')
+        self.B = (W != 0).astype(int)
+        if method == 'linear':
+            self.XX = GenerateData._simulate_linear_sem(
+                    W, n, T, sem_type, noise_scale)
+        elif method == 'nonlinear':
+            self.XX = GenerateData._simulate_nonlinear_sem(
+                    W, n, T, sem_type, noise_scale)
+        logging.info('Finished synthetic dataset')
 
     @staticmethod
     def _simulate_linear_sem(W, n, T, sem_type, noise_scale):
@@ -174,12 +107,12 @@ class Generate_Synthetic_Data(object):
         ordered_vertices = list(nx.topological_sort(G_nx))
         assert len(ordered_vertices) == d
         X = np.zeros([T, d])
-        XX = np.zeros((d, n, T))
+        XX = np.zeros((T, n, d))
         for j in ordered_vertices:
             parents = list(G_nx.predecessors(j))
             X[:, j] = _simulate_single_equation(X[:, parents], W[parents, j], scale_vec[j])
         for ns in range(n):
-            XX[:, ns] = np.transpose(X)
+            XX[:, ns] = X
         return XX
 
     @staticmethod
@@ -266,204 +199,3 @@ class Generate_Synthetic_Data(object):
             XX[:, ns] = X
 
         return XX
-
-
-
-class DAG(object):
-    '''
-    A class for simulating random (causal) DAG, where any DAG generator
-    method would return the weighed/binary adjacency matrix of a DAG.
-    Besides, we recommend using the python package "NetworkX"
-    to create more structures types.
-    '''
-
-    @staticmethod
-    def _random_permutation(M):
-        # np.random.permutation permutes first axis only
-        P = np.random.permutation(np.eye(M.shape[0]))
-        return P.T @ M @ P
-
-    @staticmethod
-    def _random_acyclic_orientation(B_und):
-        B = np.tril(DAG._random_permutation(B_und), k=-1)
-        B_perm = DAG._random_permutation(B)
-        return B_perm
-
-    @staticmethod
-    def _graph_to_adjmat(G):
-        return nx.to_numpy_array(G)
-
-    @staticmethod
-    def _BtoW(B, d, w_range):
-        U = np.random.uniform(low=w_range[0], high=w_range[1], size=[d, d])
-        U[np.random.rand(d, d) < 0.5] *= -1
-        W = (B != 0).astype(float) * U
-        return W
-
-    @staticmethod
-    def _low_rank_dag(d, degree, rank):
-        """
-        Simulate random low rank DAG with some expected degree.
-
-        Parameters
-        ----------
-        d: int
-            Number of nodes.
-        degree: int
-            Expected node degree, in + out.
-        rank: int
-            Maximum rank (rank < d-1).
-
-        Return
-        ------
-        B: np.nparray
-            Initialize DAG.
-        """
-        prob = float(degree) / (d - 1)
-        B = np.triu((np.random.rand(d, d) < prob).astype(float), k=1)
-        total_edge_num = np.sum(B == 1)
-        sampled_pa = sample(range(d - 1), rank)
-        sampled_pa.sort(reverse=True)
-        sampled_ch = []
-        for i in sampled_pa:
-            candidate = set(range(i + 1, d))
-            candidate = candidate - set(sampled_ch)
-            sampled_ch.append(sample(candidate, 1)[0])
-            B[i, sampled_ch[-1]] = 1
-        remaining_pa = list(set(range(d)) - set(sampled_pa))
-        remaining_ch = list(set(range(d)) - set(sampled_ch))
-        B[np.ix_(remaining_pa, remaining_ch)] = 0
-        after_matching_edge_num = np.sum(B == 1)
-
-        # delta = total_edge_num - after_matching_edge_num
-        # mask B
-        maskedB = B + np.tril(np.ones((d, d)))
-        maskedB[np.ix_(remaining_pa, remaining_ch)] = 1
-        B[maskedB == 0] = 1
-
-        remaining_ch_set = set([i + d for i in remaining_ch])
-        sampled_ch_set = set([i + d for i in sampled_ch])
-        remaining_pa_set = set(remaining_pa)
-        sampled_pa_set = set(sampled_pa)
-
-        edges = np.transpose(np.nonzero(B))
-        edges[:, 1] += d
-        bigraph = nx.Graph()
-        bigraph.add_nodes_from(range(2 * d))
-        bigraph.add_edges_from(edges)
-        M = nx.bipartite.maximum_matching(bigraph, top_nodes=range(d))
-        while len(M) > 2 * rank:
-            keys = set(M.keys())
-            rmv_cand = keys & (remaining_pa_set | remaining_ch_set)
-            p = sample(rmv_cand, 1)[0]
-            c = M[p]
-            # destroy p-c
-            bigraph.remove_edge(p, c)
-            M = nx.bipartite.maximum_matching(bigraph, top_nodes=range(d))
-
-        new_edges = np.array(bigraph.edges)
-        for i in range(len(new_edges)):
-            new_edges[i,].sort()
-        new_edges[:, 1] -= d
-
-        BB = np.zeros((d, d))
-        B = np.zeros((d, d))
-        BB[new_edges[:, 0], new_edges[:, 1]] = 1
-
-        if np.sum(BB == 1) > total_edge_num:
-            delta = total_edge_num - rank
-            BB[sampled_pa, sampled_ch] = 0
-            rmv_cand_edges = np.transpose(np.nonzero(BB))
-            if delta <= 0:
-                raise RuntimeError(r'Number of edges is below the rank, please \
-                                   set a larger edge or degree \
-                                   (you can change seed or increase degree).')
-            selected = np.array(sample(rmv_cand_edges.tolist(), delta))
-            B[selected[:, 0], selected[:, 1]] = 1
-            B[sampled_pa, sampled_ch] = 1
-        else:
-            B = deepcopy(BB)
-
-        B = B.transpose()
-        return B
-
-    @staticmethod
-    def erdos_renyi(n_nodes, n_edges, weight_range=None, seed=None):
-
-        assert n_nodes > 0
-        set_random_seed(seed)
-        # Erdos-Renyi
-        creation_prob = (2 * n_edges) / (n_nodes ** 2)
-        G_und = nx.erdos_renyi_graph(n=n_nodes, p=creation_prob, seed=seed)
-        B_und = DAG._graph_to_adjmat(G_und)
-        B = DAG._random_acyclic_orientation(B_und)
-        if weight_range is None:
-            return B
-        else:
-            W = DAG._BtoW(B, n_nodes, weight_range)
-        return W
-
-    @staticmethod
-    def scale_free(n_nodes, n_edges, weight_range=None, seed=None):
-
-        assert (n_nodes > 0 and n_edges >= n_nodes and n_edges < n_nodes * n_nodes)
-        set_random_seed(seed)
-        # Scale-free, Barabasi-Albert
-        m = int(round(n_edges / n_nodes))
-        G_und = nx.barabasi_albert_graph(n=n_nodes, m=m)
-        B_und = DAG._graph_to_adjmat(G_und)
-        B = DAG._random_acyclic_orientation(B_und)
-        if weight_range is None:
-            return B
-        else:
-            W = DAG._BtoW(B, n_nodes, weight_range)
-        return W
-
-    @staticmethod
-    def bipartite(n_nodes, n_edges, split_ratio = 0.2, weight_range=None, seed=None):
-
-        assert n_nodes > 0
-        set_random_seed(seed)
-        # Bipartite, Sec 4.1 of (Gu, Fu, Zhou, 2018)
-        n_top = int(split_ratio * n_nodes)
-        n_bottom = n_nodes -  n_top
-        creation_prob = n_edges/(n_top*n_bottom)
-        G_und = bipartite.random_graph(n_top, n_bottom, p=creation_prob, directed=True)
-        B_und = DAG._graph_to_adjmat(G_und)
-        B = DAG._random_acyclic_orientation(B_und)
-        if weight_range is None:
-            return B
-        else:
-            W = DAG._BtoW(B, n_nodes, weight_range)
-        return W
-
-    @staticmethod
-    def hierarchical(n_nodes, degree=5, graph_level=5, weight_range=None, seed=None):
-
-        assert n_nodes > 1
-        set_random_seed(seed)
-        prob = float(degree) / (n_nodes - 1)
-        B = np.tril((np.random.rand(n_nodes, n_nodes) < prob).astype(float), k=-1)
-        point = sample(range(n_nodes - 1), graph_level - 1)
-        point.sort()
-        point = [0] + [x + 1 for x in point] + [n_nodes]
-        for i in range(graph_level):
-            B[point[i]:point[i + 1], point[i]:point[i + 1]] = 0
-        if weight_range is None:
-            return B
-        else:
-            W = DAG._BtoW(B, n_nodes, weight_range)
-        return W
-
-    @staticmethod
-    def low_rank(n_nodes, degree=1, rank=5, weight_range=None, seed=None):
-
-        assert n_nodes > 0
-        set_random_seed(seed)
-        B = DAG._low_rank_dag(n_nodes, degree, rank)
-        if weight_range is None:
-            return B
-        else:
-            W = DAG._BtoW(B, n_nodes, weight_range)
-        return W
-
