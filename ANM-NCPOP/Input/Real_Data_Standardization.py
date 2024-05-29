@@ -23,6 +23,8 @@ class Real_Data_Standardization(object):
     Raw_data: npz
             x：[d, n, T] sample time series 
             y: true_dag
+    File_PATH_Datasets: 
+            Route of saving test data
 
     Examples
     -------------------------------------------------------------------------------------------------
@@ -44,6 +46,13 @@ class Real_Data_Standardization(object):
         self.File_PATH = File_PATH
         self.Data_NAME = Data_NAME
 
+        filename = self.Data_NAME.capitalize()
+        File_PATH_Base = self.File_PATH +'Results_'+ filename +'/'
+        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
+        if not os.path.exists(self.File_PATH_Datasets):
+            os.makedirs(self.File_PATH_Datasets)
+        print('ANM-NCPOP INFO: Created Datasets_'+ method.capitalize()+ ' File!')
+
     def Produce_Rawdata(self):
 
         def readable_File(FilePATH):
@@ -63,7 +72,7 @@ class Real_Data_Standardization(object):
 
         # Check empty files under riute
         if len(self.File_PATH) == 0:
-            print('INFO: No Data Under the Current Route!')
+            print('ANM-NCPOP INFO: No Data Under the Current Route!')
         else:
             File_NAME = []
             File_TYPE = []
@@ -78,54 +87,41 @@ class Real_Data_Standardization(object):
                 Tests_data = np.load(self.File_PATH + self.Data_NAME+'.npz', allow_pickle=True)
                 Raw_data = Tests_data['x']
                 true_dag = Tests_data['y']
-                print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')'''
+                print('ANM-NCPOP INFO: Check for '+self.Data_NAME +'.npz'+ '!')'''
 
             if self.Data_NAME+'.tar.gz' in self.Read_File:
                 # open file
                 file = tarfile.open(self.File_PATH + self.Data_NAME + '.tar.gz')
-
-                # print file names
                 file_names = file.getnames()
-                print(file_names)
-
                 # extract files
                 file.extractall(self.File_PATH)
-
-                # close file
                 file.close()
-
                 Raw_data = np.load(self.File_PATH+file_names[2])
                 true_dag = pd.read_csv(self.File_PATH+file_names[3])
 
                 # save numpy to npz file
-                np.savez(self.Data_NAME+'.npz', x=Raw_data , y=true_dag)
-                print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')
+                nn = true_dag.index
+                ne = np.count_nonzero(true_dag)
+                data_name = self.Data_NAME.capitalize()+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                np.savez(self.File_PATH_Datasets +data_name+'.npz', x=Raw_data , y=true_dag)
+                print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
 
             elif self.Data_NAME+'.csv' in self.Read_File:
                 Raw_data = pd.read_csv(self.File_PATH+ self.Data_NAME+'.csv', header=0, index_col=False)
                 true_dag = pd.read_csv(self.File_PATH+'true_graph.csv', header=0, index_col=0)
-
+                
                 # save numpy to npz file
-                np.savez(self.Data_NAME+'.npz', x=Raw_data , y=true_dag)
-                print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')
+                nn = true_dag.index
+                ne = np.count_nonzero(true_dag)
+                data_name = self.Data_NAME.capitalize()+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                np.savez(self.File_PATH_Datasets +data_name+'.npz', x=Raw_data , y=true_dag)
+                print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
 
 
 
             ################################ Deal with Multi-dimensions Causality Data ###################################
             elif os.path.exists(self.TS_path):
                 read_Dir_TS=os.listdir(self.TS_path)
-                # true_dag = pd.read_csv(self.File_PATH+'true_graph.csv', header=0, index_col=0)
-                '''
-                Timeseries_List_path = self.File_PATH+'series_list.csv'
-                Read_Timeseries = pd.read_csv(Timeseries_List_path)
-                print(len(Read_Timeseries), len(read_Dir_TS))
-                if len(Read_Timeseries) >= len(read_Dir_TS):
-                    print('INFO: Start Analyzing '+ self.Data_NAME + ' Time Series File!')
-                    TS_List = read_Dir_TS
-                else:
-                    print('INFO: Start Analyzing '+ self.Data_NAME + ' Time Series List!')
-                    TS_List = Read_Timeseries['Series_num']
-                '''
                 true_graph = np.load(self.File_PATH+'true_graph.npz')
 
                 labels = ["FUMARATE", "GTP", "H2O", "CIS-ACONITATE", "MALATE",
@@ -136,8 +132,6 @@ class Real_Data_Standardization(object):
                 # print(true_dag)
                 lds = pd.read_csv(self.TS_path+ read_Dir_TS[0], delimiter='\t', index_col=0, header=None)
                 feature_name = np.array(lds.index)
-                # lds_trans = np.transpose(lds)
-                # feature_name = lds_trans.columns
                 feature_num = len(feature_name)
                 sample_num = len(read_Dir_TS)
                 T_num = lds.shape[1]
@@ -148,20 +142,13 @@ class Real_Data_Standardization(object):
                     X_trans = np.transpose(X)
                     for fn in range(feature_num):
                         Raw_data[fn, ns, :] = list(X_trans[feature_name[fn]])
-                    '''
-                    matrix = np.zeros((d, d))
-                    np.fill_diagonal(matrix, 0)
-                    np.fill_diagonal(matrix[:, 1:], 1)
-                    np.savez(self.Data_NAME+'.npz', x=Raw_data , y=matrix)
-                    print('INFO: Check for '+self.Data_NAME +'.npz'+ '!')
-
-                    '''
-                non_zero_count = np.count_nonzero(true_dag)
 
                 # save numpy to npz file
-                sname = self.Data_NAME + '_'+str(feature_num)+'_'+str(non_zero_count)+'_TS.npz'
-                np.savez(sname, x=Raw_data , y=true_dag)
-                print('INFO: Check for '+sname + '!')
+                nn = feature_num
+                ne = np.count_nonzero(true_dag)
+                data_name = self.Data_NAME.capitalize()+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                np.savez(self.File_PATH_Datasets +data_name+'.npz', x=Raw_data , y=true_dag)
+                print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
 
             else:
                 print('INFO: Wrong DataType!')
