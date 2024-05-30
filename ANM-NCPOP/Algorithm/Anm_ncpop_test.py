@@ -94,14 +94,17 @@ class Anm_ncpop_test(object):
             os.makedirs(self.File_PATH_MetricsDAG)
         print('ANM-NCPOP INFO: Created MetricsDAG'+ ' File!')
 
-        # Analyze files under File_PATH_Base
-        tqdm=os.listdir(self.File_PATH_Base)
-        for d in range(len(tqdm)):
-            # Read data
-            Rawdata = np.load(os.path.join(File_PATH_Datasets, tqdm[d]))
-            sname = self.extract_and_join(d)
-            self.Ancpop_estimate(self, Rawdata, sname)
-        print('ANM-NCPOP INFO: Finished '+ self.filename+'Analyzing!')
+        ################################################  Analyzing Data under Datasets ###############################
+        tqdm=os.listdir(self.File_PATH_Summary_Datails)
+        read_Dir=os.listdir(self.File_PATH_Datasets)
+        while len(tqdm)!= len(read_Dir):
+            for file_f in read_Dir:
+                sname = self.extract_and_join(d)
+                df_F1 = self.File_PATH_Summary_Datails + 'F1_'+sname+'.csv'
+                if not os.path.exists(df_F1):
+                    self.Ancpop_estimate(self, Rawdata, sname)
+                print('ANM-NCPOP INFO: Finished '+ sname+'Analyzing!')
+        print('ANM NCPOP INFO: Finished simulations!')
 
     @staticmethod
     def Ancpop_estimate(self, Rawdata, sname):
