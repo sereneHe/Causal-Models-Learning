@@ -63,6 +63,9 @@ class Anm_ncpop_test(object):
     def Ancpop(self):
         ################################################  Create Ground Tier Folders #############################################
         self.File_PATH_Base = self.File_PATH +'Result_'+ self.sname +'/'
+        if not os.path.exists(self.File_PATH_Base):
+            os.makedirs(self.File_PATH_Base)
+        print('ANM-NCPOP INFO: Created Basement'+ ' File!')
         
         ################################################  Create First Tier Folders #############################################
         self.File_PATH_Summary = self.File_PATH_Base + 'Summary_'+ self.sname +'/'
