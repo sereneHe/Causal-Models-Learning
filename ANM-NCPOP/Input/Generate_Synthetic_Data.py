@@ -125,7 +125,7 @@ class Generate_Synthetic_Data(object):
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
                 print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-        print('ANM-NCPOP INFO: Finished '+ printname+' dataset generation!')
+        print('ANM-NCPOP INFO: Finished dataset generation!')
 
     @staticmethod
     def _simulate_linear_sem(W, n, T, sem_type, noise_scale):
