@@ -74,18 +74,29 @@ class Generate_Synthetic_Data(object):
     >>>         Generate_Synthetic_Data(File_PATH, n=num_datasets, T, m, s, n, e)
     '''
 
-    def __init__(self, File_PATH, n=1000, T=20, method='linear', sem_type='gauss', nodes, edges, noise_scale=1.0):
-        nodes_num = len(nodes)
-        edges_num = len(edges)
-                
-        ############################################## Create Artificial Dataset ###################################
-        filename = method.capitalize()+'SEM_' + sem_type.capitalize() +'Noise'
-        File_PATH_Base = File_PATH +'Results_'+ filename +'/'
+    def __init__(self, File_PATH='Test/', n=1000, T=20, method='linear', sem_type='gauss', nodes=range(6,15,3), edges=range(10,20,5), noise_scale=1.0):
+        self.File_PATH = File_PATH
+        self.n = n
+        self.T = T
+        self.method = method
+        sem_type =sem_type
+        self.filename = method.capitalize()+'SEM_' + sem_type.capitalize() +'Noise'
+        self.nodes = nodes
+        self.edges = edges
+        self.noise_scale = noise_scale
+
+    def genarate_data(self):
+        ################################################  Create Ground Tier Folders #############################################
+        self.File_PATH_Base = self.File_PATH +'Result_'+ self.filename +'/'
+        
+        ################################################  Create First Tier Folders #############################################
         self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
         if not os.path.exists(self.File_PATH_Datasets):
             os.makedirs(self.File_PATH_Datasets)
-        print('ANM-NCPOP INFO: Created Datasets_'+ method.capitalize()+ ' File!')
-
+        print('ANM-NCPOP INFO: Created Datasets' + ' File!')
+        
+        nodes_num = len(self.nodes)
+        edges_num = len(self.edges)
         count = 0
         tqdm_csv=os.listdir(self.File_PATH_Datasets)
         while len(tqdm_csv) != nodes_num* edges_num:
