@@ -99,7 +99,7 @@ class Anm_ncpop_test(object):
         for d in range(len(tqdm)):
             # Read data
             Rawdata = np.load(os.path.join(File_PATH_Datasets, tqdm[d]))
-            sname = extract_and_join(d)
+            sname = self.extract_and_join(d)
             self.Ancpop_estimate(self, Rawdata, sname)
         print('ANM-NCPOP INFO: Finished '+ self.filename+'Analyzing!')
 
