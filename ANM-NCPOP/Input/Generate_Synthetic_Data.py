@@ -108,7 +108,7 @@ class Generate_Synthetic_Data(object):
                         w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
                         self.B = (W != 0).astype(int)
                         self.XX = Generate_Synthetic_Data._simulate_linear_sem(W, n, T, sem_type, noise_scale)
-                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                        data_name = self.filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
                         np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
@@ -120,7 +120,7 @@ class Generate_Synthetic_Data(object):
                         w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
                         self.B = (W != 0).astype(int)
                         self.XX = Generate_Synthetic_Data._simulate_nonlinear_sem(W, n, T, sem_type, noise_scale)
-                        data_name = filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+                        data_name = self.filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
                         np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
