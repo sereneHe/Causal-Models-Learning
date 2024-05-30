@@ -51,7 +51,7 @@ class Anm_ncpop_test(object):
     >>> rt.Ancpop()
 
     '''
-    def __init__(self, File_PATH_Datasets=‘read/data/PATH/’, File_PATH = File_PATH, filename, File_PATH_Summary_Datails=‘SAVE/TO/PATH/’, Datasize=range(5, 40, 5), Timesize= range(3, 6, 1)):
+    def __init__(self, File_PATH_Datasets=‘read/data/PATH/’, File_PATH = File_PATH, File_PATH_Summary_Datails=‘SAVE/TO/PATH/’, Datasize=range(5, 40, 5), Timesize= range(3, 6, 1)):
         self.File_PATH_Datasets = File_PATH_Datasets
         self.File_PATH_Summary_Datails = File_PATH_Summary_Datails
         self.File_PATH = File_PATH
@@ -59,9 +59,7 @@ class Anm_ncpop_test(object):
         self.Datasize_num = len(self.Datasize)
         self.Timesize = Timesize
         self.Timesize_num = len(self.Timesize)
-        self.filename = self.extract_and_join(self.Data_NAME)
-        self.sname = re.split("/", self.File_PATH_Datasets)[-1]
-        self.filename = re.split("_", self.File_PATH_Datasets)[1]
+        self.filename = re.split("_", re.split("/", self.File_PATH_Datasets)[-1])[1]
         
         
     def extract_and_join(filename):
@@ -96,17 +94,19 @@ class Anm_ncpop_test(object):
             os.makedirs(self.File_PATH_MetricsDAG)
         print('ANM-NCPOP INFO: Created MetricsDAG'+ ' File!')
 
+        # Analyze files under File_PATH_Base
         tqdm=os.listdir(self.File_PATH_Base)
         for d in range(len(tqdm)):
             # Read data
             Rawdata = np.load(os.path.join(File_PATH_Datasets, tqdm[d]))
-            Raw_data = Rawdata['x']
-            true_dag = Rawdata['y']
-            self.Ancpop_estimate(self)
+            sname = extract_and_join(d)
+            self.Ancpop_estimate(self, Rawdata, sname)
         print('ANM-NCPOP INFO: Finished '+ self.filename+'Analyzing!')
 
     @staticmethod
-    def Ancpop_estimate(self):
+    def Ancpop_estimate(self, Rawdata, sname):
+        Raw_data = Rawdata['x']
+        true_dag = Rawdata['y']
         duration_anm_ncpop = []
         f1_anm_ncpop = []
         df = pd.DataFrame(columns=['Datasize','Timesets', 'Duration', 'fdr', 'tpr', 'fpr', 'shd', 'nnz', 'precision', 'recall', 'F1', 'gscore'])
@@ -119,7 +119,7 @@ class Anm_ncpop_test(object):
                 anmNCPO.learn(data = data)
                 # Save estimate causal_matrix
                 # save_result_name = LinearSEM_GaussNoise_6Nodes_15Edges_TS_15Datasize_5Timesets
-                save_result_name = self.sname+'_' + str(i) + 'Datasize_'+str(j) +'Timesets'
+                save_result_name = sname+'_' + str(i) + 'Datasize_'+str(j) +'Timesets'
                 pd.DataFrame(anmNCPO.causal_matrix).to_csv(self.File_PATH_MetricsDAG + save_result_name+'.csv',index=False)
 
                 # Plot predict_dag and true_dag
@@ -138,8 +138,8 @@ class Anm_ncpop_test(object):
                 print('ANM-NCPOP INFO: ' +save_result_name +' is done!'+'F1 Score is'+ str(met.metrics['F1'])+'.')
                 print('ANM-NCPOP INFO: Time Duration is '+ str(time.time()-t_start))
                 duration_anm_ncpop.append(time.time()-t_start)
-        df.to_csv(self.File_PATH_MetricsDAG + 'Scores_'+self.sname+'.csv', index=False)
+        df.to_csv(self.File_PATH_MetricsDAG + 'Scores_'+sname+'.csv', index=False)
         df_F1 = pd.DataFrame({"DataSize":self.Datasize, "Timesets":self.Timesets, 'F1_Score':f1_anm_ncpop, 'Duration':duration_anm_ncpop})
-        df_F1.to_csv(File_PATH_Summary_Datails + 'F1_'+self.sname+'.csv',index=False)
+        df_F1.to_csv(File_PATH_Summary_Datails + 'F1_'+sname+'.csv',index=False)
         return df_F1
 
