@@ -140,6 +140,6 @@ class Anm_ncpop_test(object):
                 duration_anm_ncpop.append(time.time()-t_start)
         df.to_csv(self.File_PATH_MetricsDAG + 'Scores_'+sname+'.csv', index=False)
         df_F1 = pd.DataFrame({"DataSize":self.Datasize, "Timesets":self.Timesets, 'F1_Score':f1_anm_ncpop, 'Duration':duration_anm_ncpop})
-        df_F1.to_csv(File_PATH_Summary_Datails + 'F1_'+sname+'.csv',index=False)
+        df_F1.to_csv(self.File_PATH_Summary_Datails + 'F1_'+sname+'.csv',index=False)
         return df_F1
 
