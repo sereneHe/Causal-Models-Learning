@@ -44,22 +44,24 @@ class Anm_ncpop_test(object):
     >>> Timesize = range(3, 6, 1)
     >>> File_PATH_Base = 'Test/Examples/Test_data/'
     >>> File_PATH_Summary_Datails = 'Test/Examples/Test_data/Summary'
+    >>> File_PATH = File_PATH
     >>> Data_NAME = 'LinearSEM_GaussNoise_6Nodes_15Edges_TS.npz'
     >>> # Data_NAME = 'Krebs_Cycle_16Nodes_43Edges_TS.npz'
     >>> rt = Anm_ncpop_test(File_PATH_Base, Data_NAME, File_PATH_Summary_Datails, datasize, Timesize)
     >>> rt.Ancpop()
 
     '''
-    def __init__(self, File_PATH_Datasets=‘read/data/PATH’, Data_NAME='dataname', File_PATH_Summary_Datails=‘SAVE/TO/PATH’, Datasize=range(5, 40, 5), Timesize= range(3, 6, 1)):
+    def __init__(self, File_PATH_Datasets=‘read/data/PATH/’, File_PATH = File_PATH, filename, File_PATH_Summary_Datails=‘SAVE/TO/PATH/’, Datasize=range(5, 40, 5), Timesize= range(3, 6, 1)):
         self.File_PATH_Datasets = File_PATH_Datasets
         self.File_PATH_Summary_Datails = File_PATH_Summary_Datails
-        self.Data_NAME =  Data_NAME
+        self.File_PATH = File_PATH
         self.Datasize =  Datasize
         self.Datasize_num = len(self.Datasize)
         self.Timesize = Timesize
         self.Timesize_num = len(self.Timesize)
         self.filename = self.extract_and_join(self.Data_NAME)
-        self.sname = re.split("\.", self.Data_NAME)[0]
+        self.sname = re.split("/", self.File_PATH_Datasets)[-1]
+        self.filename = re.split("_", self.File_PATH_Datasets)[1]
         
         
     def extract_and_join(filename):
@@ -94,12 +96,13 @@ class Anm_ncpop_test(object):
             os.makedirs(self.File_PATH_MetricsDAG)
         print('ANM-NCPOP INFO: Created MetricsDAG'+ ' File!')
 
-        # Read data
-        Rawdata = np.load(os.path.join(File_PATH_Datasets, self.Data_NAME))
-        Raw_data = Rawdata['x']
-        true_dag = Rawdata['y']
-        
-        self.Ancpop_estimate(self)
+        tqdm=os.listdir(self.File_PATH_Base)
+        for d in range(len(tqdm)):
+            # Read data
+            Rawdata = np.load(os.path.join(File_PATH_Datasets, tqdm[d]))
+            Raw_data = Rawdata['x']
+            true_dag = Rawdata['y']
+            self.Ancpop_estimate(self)
         print('ANM-NCPOP INFO: Finished '+ self.filename+'Analyzing!')
 
     @staticmethod
