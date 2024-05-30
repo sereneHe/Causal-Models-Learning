@@ -34,7 +34,7 @@ class Anm_ncpop_test(object):
     Casaul Metrics: np.matrix
             estimate DAG matrix
     Summary scores table: pd.dataframe
-           col_names = ['Datasize','Timesets', 'fdr', 'tpr', 'fpr', 'shd', 'nnz', 'precision', 'recall', 'F1', 'gscore'])
+           col_names = ['Datasize','Timesets', 'Duration', 'fdr', 'tpr', 'fpr', 'shd', 'nnz', 'precision', 'recall', 'F1', 'gscore'])
     Summary table: pd.dataframe
            col_names = ['DataSize', 'Timesets', 'F1_Score', 'Duration']
 
