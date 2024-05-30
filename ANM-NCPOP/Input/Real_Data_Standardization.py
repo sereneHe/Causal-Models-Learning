@@ -44,7 +44,7 @@ class Real_Data_Standardization(object):
 
     def __init__(self, File_PATH='Kreb_Cycles/', Data_NAME='Krebs_Cycle'):
         self.File_PATH = File_PATH
-        self.Data_NAME = Data_NAME.capitalize()
+        self.filename = Data_NAME.capitalize()
         
     def standardize_data(self):
         Real_Data_Standardization.Produce_Rawdata(self)
@@ -53,7 +53,7 @@ class Real_Data_Standardization(object):
         self.File_PATH_Base = self.File_PATH +'Result_'+ self.filename +'/'
         
         ################################################  Create First Tier Folders #############################################
-        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
+        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ self.filename +'/'
         if not os.path.exists(self.File_PATH_Datasets):
             os.makedirs(self.File_PATH_Datasets)
         print('ANM-NCPOP INFO: Created Datasets' + ' File!')
@@ -61,7 +61,7 @@ class Real_Data_Standardization(object):
         # save numpy to npz file
         nn = self.true_dag.index
         ne = np.count_nonzero(self.true_dag)
-        data_name = self.Data_NAME  +'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
+        data_name = self.filename  +'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
         np.savez(self.File_PATH_Datasets + data_name +'.npz', x=self.Raw_data , y=self.true_dag)
         print('ANM-NCPOP INFO: Finished '+ data_name+' dataset standardization!')  
         
