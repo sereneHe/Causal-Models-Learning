@@ -6,7 +6,6 @@ from pickle import TRUE
 from random import sample
 from copy import deepcopy
 from tqdm import tqdm
-from BuiltinDataSet import DAG
 import numpy as np
 import pandas as pd
 import networkx as nx
@@ -14,6 +13,7 @@ import logging
 import tarfile
 import os
 import re
+# import time
 import random
 
 
@@ -28,7 +28,7 @@ class Generate_Synthetic_Data(object):
     Parameters
     ------------------------------------------------------------------------------------------------
     File_PATH
-            save route
+            Read data path
     n: int
             Number of samples for standard trainning dataset.
     T: int
@@ -41,7 +41,9 @@ class Generate_Synthetic_Data(object):
     nodes: series
             Notes of samples for standard trainning dataset.
     edges: series
-            Edges of samples for standard trainning dataset.
+            Edges of samples for standard training dataset.
+    noise_scale: float
+            Scale parameter of noise distribution in linear SEM.
         
     Returns
     ------------------------------------------------------------------------------------------------
@@ -51,36 +53,47 @@ class Generate_Synthetic_Data(object):
     File_PATH_Datasets: 
             Route of saving test data
 
-    Examples
+    Examples 1
     -------------------------------------------------------------------------------------------------
     >>> method = 'linear'
     >>> sem_type = 'gauss'
-    >>> nodes = range(6,15,3)
+    >>> nodes = range(6,12,3)
     >>> edges = range(10,20,5)
     >>> T=200
     >>> num_datasets = 120
-    >>> File_PATH = 'Test/'
-    >>> _ts = Generate_Synthetic_Data(File_PATH, n=num_datasets, T, method, sem_type, nodes, edges)
+    >>> File_PATH = '../Test/Examples/Test_data/'
+    >>> noise_scale = 1.0
+    >>> _ts = Generate_Synthetic_Data(File_PATH, num_datasets, T, method, sem_type, nodes, edges, noise_scale)
+    >>> _ts.genarate_data()
 
+    Examples 2
+    -------------------------------------------------------------------------------------------------
     >>> noise_type = {
-    >>>     'nonlinear': ['gp-add','mlp', 'mim', 'gp', 'quadratic'],
+    >>>     'nonlinear': ['gp-add', 'mlp', 'mim', 'gp', 'quadratic'],
     >>>     'linear':  ['gauss', 'exp', 'gumbel', 'uniform', 'logistic']
     >>> }
-    >>> sem_type = ['nonlinear', 'linear'] 
+    >>> sem_type = ['linear', 'nonlinear'] 
+    >>> nodes = range(6,12,3)
+    >>> edges = range(10,20,5)
+    >>> T=200
+    >>> num_datasets = 120
+    >>> File_PATH = '../Test/Examples/Test_data/'
+    >>> noise_scale = 1.0
+
     >>> for m in sem_type :
     >>>   for s in noise_type[m]:
-    >>>     for n in nodes:
-    >>>       for e in edges:
-    >>>         Generate_Synthetic_Data(File_PATH, n=num_datasets, T, m, s, n, e)
+    >>>     _ts = Generate_Synthetic_Data(File_PATH, num_datasets, T, m, s, nodes, edges, noise_scale)
+    >>>     print(File_PATH, num_datasets, T, m, s, nodes, edges, noise_scale)
+    >>>     _ts.genarate_data()
     '''
 
-    def __init__(self, File_PATH='Test/', n=1000, T=20, method='linear', sem_type='gauss', nodes=range(6,15,3), edges=range(10,20,5), noise_scale=1.0):
+    def __init__(self, File_PATH, n, T, method, sem_type, nodes, edges, noise_scale):
         self.File_PATH = File_PATH
         self.n = n
         self.T = T
         self.method = method
-        sem_type =sem_type
-        self.filename = method.capitalize()+'SEM_' + sem_type.capitalize() +'Noise'
+        self.sem_type =sem_type
+        self.filename = self.method.capitalize()+'SEM_' + self.sem_type.capitalize() +'Noise'
         self.nodes = nodes
         self.edges = edges
         self.noise_scale = noise_scale
@@ -90,7 +103,7 @@ class Generate_Synthetic_Data(object):
         self.File_PATH_Base = self.File_PATH +'Result_'+ self.filename +'/'
         
         ################################################  Create First Tier Folders #############################################
-        self.File_PATH_Datasets = File_PATH_Base + 'Datasets_'+ filename +'/'
+        self.File_PATH_Datasets = self.File_PATH_Base + 'Datasets_'+ self.filename +'/'
         if not os.path.exists(self.File_PATH_Datasets):
             os.makedirs(self.File_PATH_Datasets)
         print('ANM-NCPOP INFO: Created Datasets' + ' File!')
@@ -99,36 +112,42 @@ class Generate_Synthetic_Data(object):
         edges_num = len(self.edges)
         count = 0
         tqdm_csv=os.listdir(self.File_PATH_Datasets)
-        while len(tqdm_csv) != nodes_num* edges_num:
-            print('ANM-NCPOP INFO: Generating '+ printname + ' Dataset!')
-            if method == 'linear':
+        while len(tqdm_csv) < nodes_num* edges_num:
+            print('ANM-NCPOP INFO: Generating '+ self.filename + ' Dataset!')
+            if self.method == 'linear':
                 for nn in nodes:
                     for ne in edges:
                         count += 1
                         w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
-                        self.B = (W != 0).astype(int)
-                        self.XX = Generate_Synthetic_Data._simulate_linear_sem(W, n, T, sem_type, noise_scale)
+                        self.B = (w != 0).astype(int)
+                        self.XX = Generate_Synthetic_Data._simulate_linear_sem(self.B, self.n, self.T, self.sem_type, self.noise_scale)
                         data_name = self.filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
-                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
+                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=self.XX , y=self.B)
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
                 print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-            elif method == 'nonlinear':
+                break
+            elif self.method == 'nonlinear':
                 for nn in nodes:
                     for ne in edges:
-                        count = count +1
+                        count += 1
                         w = DAG.erdos_renyi(n_nodes=nn, n_edges=ne, seed=1)
-                        self.B = (W != 0).astype(int)
-                        self.XX = Generate_Synthetic_Data._simulate_nonlinear_sem(W, n, T, sem_type, noise_scale)
+                        self.B = (w != 0).astype(int)
+                        self.XX = Generate_Synthetic_Data._simulate_nonlinear_sem(self.B, self.n, self.T, self.sem_type, self.noise_scale)
                         data_name = self.filename+'_'+str(nn)+'Nodes_'+str(ne)+'Edges_TS'
-                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=XX , y=B)
+                        np.savez(self.File_PATH_Datasets +data_name+'.npz', x=self.XX , y=self.B)
                         logging.info('ANM-NCPOP INFO: Finished synthetic dataset')
                         print('ANM-NCPOP INFO: '+ data_name + ' IS DONE!')
                 print('ANM-NCPOP INFO: '+ str(count) + ' datasets are generated!')
-        print('ANM-NCPOP INFO: Finished'+ self.filename +' dataset generation!')
+                break
+            else:
+                raise ValueError('Unknown distribution type. Only linear and nonlinear types are accepted.')
+                
+            # time.sleep(30)
+        print('ANM-NCPOP INFO: Finished '+ self.filename +' dataset generation, which can be found under route: '+ self.File_PATH_Datasets)
 
     @staticmethod
-    def _simulate_linear_sem(W, n, T, sem_type, noise_scale):
+    def _simulate_linear_sem(W, n, T, sem_type, noise_scale=1.0):
         """
         Simulate samples from linear SEM with specified type of noise.
         For uniform, noise z ~ uniform(-a, a), where a = noise_scale.
@@ -205,7 +224,7 @@ class Generate_Synthetic_Data(object):
         return XX
 
     @staticmethod
-    def _simulate_nonlinear_sem(W, n, T, sem_type, noise_scale):
+    def _simulate_nonlinear_sem(W, n, T, sem_type, noise_scale=1.0):
         """
         Simulate samples from nonlinear SEM.
 
@@ -225,10 +244,10 @@ class Generate_Synthetic_Data(object):
         Return
         ------
         XX: np.ndarray
-            [T, n, d] sample matrix
+            [d, n, T] sample matrix
         """
         if sem_type == 'quadratic':
-            return GenerateData._simulate_quad_sem(W, T, noise_scale)
+            return Generate_SyntheticData._simulate_quad_sem(W, T, noise_scale)
 
         def _simulate_single_equation(X, scale):
             """X: [n, num of parents], x: [n]"""
@@ -276,17 +295,18 @@ class Generate_Synthetic_Data(object):
             if len(noise_scale) != d:
                 raise ValueError('noise scale must be a scalar or has length d')
             scale_vec = noise_scale
-        X = np.zeros([T, d])
-        XX = np.zeros((T, n, d))
+
+        X = np.zeros([n, d])
         G_nx =  nx.from_numpy_array(B, create_using=nx.DiGraph)
         ordered_vertices = list(nx.topological_sort(G_nx))
         assert len(ordered_vertices) == d
         for j in ordered_vertices:
             parents = list(G_nx.predecessors(j))
             X[:, j] = _simulate_single_equation(X[:, parents], scale_vec[j])
+        return X
+        XX = np.zeros((d, n, T))
         for ns in range(n):
-            XX[:, ns] = X
-
+            XX[:, ns] = np.transpose(X)
         return XX
 
 
@@ -488,4 +508,3 @@ class DAG(object):
         else:
             W = DAG._BtoW(B, n_nodes, weight_range)
         return W
-
