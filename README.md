@@ -1,8 +1,21 @@
 # Causal Model Learning with Non-Commutative Polynomial Optimization
 
-Welcome to the repository for causal discovery deliverable 3.2! This codebase encompasses notebooks and test results associated with each figure in the deliverable.
+Welcome to the repository for causal discovery deliverable 3.2 of CoDiet(https://www.codiet.eu/)! This codebase encompasses notebooks and test results associated with each figure in the deliverable.
 
-## Causal Learning Process
+# Workflows 
+
+## File Types ##
+
+*   File Type 1
+    *   Rawdata.csv
+    *   Causal_matrix.csv
+*   File Type 2
+    *   Rawdata.tsv
+    *   Causal_matrix.csv
+*   File Type 3
+    *   npz
+    
+## Causal Learning Process ##
 1. **Generate Data:** Use the `IIDSimulation` function in `Generate Data.py` to create artificial true causal graphs and observation data.
 2. **Learn Structure:** Uncover the causal structure beneath the observation data.
 3. **Visualize Comparison:** Generate heat maps to compare estimated and true graphs.
