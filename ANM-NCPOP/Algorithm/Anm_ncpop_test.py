@@ -25,10 +25,6 @@ class Anm_ncpop_test(object):
     ------------------------------------------------------------------------------------------------
     File_PATH: str
             Read file path
-    File_NAME: str
-            Read data name
-    File_PATH_Summary_Datails: str
-            Save file path
     datasize: series
     
     Timesize: series
@@ -46,30 +42,19 @@ class Anm_ncpop_test(object):
 
     Examples
     -------------------------------------------------------------------------------------------------
-    >>> # filename = LinearSEM_GaussNoise
-    >>> # data_name = LinearSEM_GaussNoise_6Nodes_15Edges_TS
-    >>> # save_name = LinearSEM_GaussNoise_6Nodes_15Edges_TS_15Datasize_5Timesets
-
     >>> datasize = range(5, 40, 5)
     >>> Timesize = range(3, 6, 1)
-    >>> File_PATH_Base = 'Test/Examples/Test_data/'
-    >>> File_PATH_Summary_Datails = 'Test/Examples/Test_data/Summary'
-    >>> File_PATH = File_PATH
-    >>> Data_NAME = 'LinearSEM_GaussNoise_6Nodes_15Edges_TS.npz'
-    >>> # Data_NAME = 'Krebs_Cycle_16Nodes_43Edges_TS.npz'
-    >>> rt = Anm_ncpop_test(File_PATH_Base, Data_NAME, File_PATH_Summary_Datails, datasize, Timesize)
+    >>> # Krebs_Cycle
+    >>> File_PATH = "../Test/Datasets/Synthetic datasets/Krebs_Cycle/"
+    >>> rt = Anm_ncpop_test(File_PATH, datasize, Timesize)
     >>> rt.Ancpop()
 
     '''
     def __init__(self, File_PATH = None, Datasize=range(5, 40, 5), Timeset= range(3, 6, 1)):
         self.File_PATH = File_PATH
         self.Datasize =  Datasize
-        # self.Datasize_num = len(self.Datasize)
         self.Timeset = Timeset
-        # self.Timesize_num = len(self.Timesize)
         self.filename = filename
-        # re.split("_", re.split("/", self.File_PATH_Datasets)[-1])[0]
-        
 
     def Ancpop(self):
         ################################################  Create Ground Tier Folders #############################################
