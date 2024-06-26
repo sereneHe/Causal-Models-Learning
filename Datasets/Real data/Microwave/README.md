@@ -20,7 +20,6 @@ We provide a total of 24 datasets, 12 with accompanying network topology informa
 
 (2)    This NumPy file stores the binary symmetric adjacency matrix for the network topology which is an undirected graph. For example, the element which is in the i-th row and j-th column of the matrix equals 1 (0) means the existence (resp. non-existence) of an undirected link between the device i and the device j.
 
-(3)    Example (M=10):
 
 
 
@@ -30,7 +29,6 @@ We provide a total of 24 datasets, 12 with accompanying network topology informa
 
 (2)    Similar to the topology, DAG.npy stores the binary adjacency matrix for the true causal alarm graph. The graph is labeled manually by experts or, for the synthetic datasets, the pre-set causal assumptions. For example, the element which is in the i-th row and j-th column of the matrix equals 1 (0) means the existence (resp. non-existence) of an directed edge from the alarm type i to alarm type j.
 
-(3)    Example (N=10):
 
 
 
