@@ -4,7 +4,7 @@ These are results for Learning Joint Multiple Dynamical Systems via Non-Commutat
 * Causal structure learning: causal structure learning methods, including classic and recently developed methods, especially gradient-based ones that can handle large problems.
 * Evaluation metrics: various commonly used metrics for causal structure learning, including F1, SHD, FDR, TPR, FDR, NNZ, etc.
 
-## Summary
+# Definitions and applications of evaluation metrics
 
 - **FDR** measures the proportion of false discoveries, often used in multiple testing scenarios.
 - **TPR (Recall)** measures the detection rate of positive instances.
@@ -14,7 +14,6 @@ These are results for Learning Joint Multiple Dynamical Systems via Non-Commutat
 - **Precision** measures the accuracy of positive predictions.
 - **Recall (TPR)** measures the ability to detect positive instances.
 
-# Definitions and applications:
 ## 1. FDR (False Discovery Rate)
 
 - **Definition**: The false discovery rate is the proportion of instances identified as positive that are actually negative.
