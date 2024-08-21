@@ -4,18 +4,15 @@ These are results for Learning Joint Multiple Dynamical Systems via Non-Commutat
 * Causal structure learning: causal structure learning methods, including classic and recently developed methods, especially gradient-based ones that can handle large problems.
 * Evaluation metrics: various commonly used metrics for causal structure learning, including F1, SHD, FDR, TPR, FDR, NNZ, etc.
 
-Args:
-W_true: ground truth graph
-W_est: predicted graph
-W_und: predicted undirected edges in CPDAG, asymmetric
+## Summary
 
-Returns in dict:
-fdr: (reverse + false positive) / prediction positive
-tpr: (true positive) / condition positive
-fpr: (reverse + false positive) / condition negative
-shd: undirected extra + undirected missing + reverse
-nnz: prediction positive
-
+- **FDR** measures the proportion of false discoveries, often used in multiple testing scenarios.
+- **TPR (Recall)** measures the detection rate of positive instances.
+- **FPR** measures the rate of false positives.
+- **SHD** measures the difference between graph structures.
+- **NNZ** measures the sparsity of a matrix.
+- **Precision** measures the accuracy of positive predictions.
+- **Recall (TPR)** measures the ability to detect positive instances.
 
 # Definitions and applications:
 ## 1. FDR (False Discovery Rate)
@@ -76,20 +73,6 @@ nnz: prediction positive
   ```
 - **Application**: Recall is used to measure a classifier's ability to detect positive instances, especially in applications where missing positive cases is costly.
 
-## Summary
-
-- **FDR** measures the proportion of false discoveries, often used in multiple testing scenarios.
-- **TPR (Recall)** measures the detection rate of positive instances.
-- **FPR** measures the rate of false positives.
-- **SHD** measures the difference between graph structures.
-- **NNZ** measures the sparsity of a matrix.
-- **Precision** measures the accuracy of positive predictions.
-- **Recall (TPR)** measures the ability to detect positive instances.
-
-These metrics together help provide a comprehensive evaluation of model performance and the effectiveness of learning algorithms.
-```
-
-This is how the explanation would look in a GitHub `README.md` file, using Markdown for headings, lists, and inline math where appropriate.
 
 Referred from:
 - https://github.com/xunzheng/notears/blob/master/notears/utils.py
