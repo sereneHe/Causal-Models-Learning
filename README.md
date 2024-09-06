@@ -9,7 +9,7 @@ Welcome to the repository for causal discovery deliverable 3.2 of CoDiet(https:/
 4. **Calculate Metrics:** Assess the performance metrics.
 5. **Demonstrate in Heatmap:** Illustrate results in a heatmap for multiple datasets.
 
-![ANM-NCPOP](/images/logo.png)
+![ANM-NCPOP](/images/Picture-anmncpop.png)
 
 ## Getting Started
 1. **Synthetic Data:** Utilize the `Ancpop_Synthetic` class to generate custom datasets.
