@@ -9,6 +9,8 @@ Welcome to the repository for causal discovery deliverable 3.2 of CoDiet(https:/
 4. **Calculate Metrics:** Assess the performance metrics.
 5. **Demonstrate in Heatmap:** Illustrate results in a heatmap for multiple datasets.
 
+![ANM-NCPOP](/images/logo.png)
+
 ## Getting Started
 1. **Synthetic Data:** Utilize the `Ancpop_Synthetic` class to generate custom datasets.
 2. **Real-world Data:** Employ the `Ancpop_Real` class in `Ancpop_Real.py` to test real data from the `./Real data` folder. Alternatively, use generated data in `./Synthetic data`.
