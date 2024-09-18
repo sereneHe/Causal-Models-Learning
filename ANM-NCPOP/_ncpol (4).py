@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[20]:
+## Xiaoyu He ##
 
 
 get_ipython().system('wget https://bootstrap.pypa.io/pip/3.6/get-pip.py')
@@ -9,9 +8,6 @@ get_ipython().system('python3 get-pip.py')
 get_ipython().system('pip3 install gcastle')
 get_ipython().system('pip3 install PyPDF2')
 
-
-# coding: utf-8
-## Xiaoyu He ##
 
 import numpy as np
 import pandas as pd
@@ -25,244 +21,6 @@ from ncpol2sdpa import*
 from base import*
 from math import sqrt
 from sympy.physics.quantum import HermitianOperator, Operator
-
-'''
-class NCPOLR_Multioperators(object):
-    """Estimator based on NCPOP Regressor
-
-    References
-    ----------
-    Quan Zhou https://github.com/Quan-Zhou/Proper-Learning-of-LDS/blob/master/ncpop/functions.py
-    Zhou, Q. and Mareˇcek, J.(2023). Learning of linear dynamical systems as a non-commutative polynomial optimization problem. IEEE Transactions on Automatic Control
-
-    Examples
-    --------
-    >>> import pandas as pd
-    >>> import sys
-    >>> sys.path.append("/home/zhouqua1")
-    >>> sys.path.append("/home/zhouqua1/NCPOP")
-    >>> from inputlds import*
-    >>> from functions import*
-    >>> from ncpol2sdpa import*
-    >>> import numpy as np
-    >>> from ..Clustering.datasets import load_heartrate
-    >>> from sympy.physics.quantum import HermitianOperator, Operator
-    >>> Test_Data = load_heartrate().reshape(600,3)
-    >>> level = 1
-    >>> N = len(np.transpose(Test_Data))
-    >>> NCPOLR2().estimate(Test_Data,N,level)
-    """
-
-    def __init__(self, **kwargs):
-        super(NCPOLR_Multioperators, self).__init__()
-
-
-    def generate_multioperators(self, name, n_vars, m_vars, hermitian=None, commutative=False):
-        """Generates a two dimensions of commutative or noncommutative operators
-
-        Parameters
-        ----------
-        name[str type]: The prefix in the symbolic representation of the noncommuting
-                    variables. This will be suffixed by a number from 00 to
-                    (n_vars-1)(m_vars-1) if n_vars > 1 and m_vars > 1.
-        n_vars[int type]: The number of variables row.
-        m_vars[int type]: The number of variables column.
-        hermitian[bool type]: Optional parameter to request Hermitian variables .
-        commutative[bool type]: Optional parameter to request commutative variables.
-                            Commutative variables are Hermitian by default.
-
-        Returns
-        -------
-        Array of class variables[array type]: `sympy.physics.quantum.operator.Operator` or
-                  `sympy.physics.quantum.operator.HermitianOperator`
-
-        Examples
-        --------
-        >>> from sympy.physics.quantum import HermitianOperator, Operator
-        >>> generate_multioperators('y', 2, 3, commutative=True)
-        #   array([[y00, y01, y02],
-        #   [y10, y11, y12]], dtype=object)
-
-        """
-
-        variables = []
-        variables1 = []
-        variables2 = []
-        for i in range(n_vars):
-            if n_vars > 1:
-                var_name1 = '%s%s' % (name, i)
-            else:
-                var_name1 = '%s' % name
-            if hermitian is not None and hermitian:
-                variables1.append(HermitianOperator(var_name1))
-            else:
-                variables1.append(Operator(var_name1))
-            variables1[-1].is_commutative = commutative
-        for n in range(len(variables1)):
-            for j in range(m_vars):
-                if m_vars > 1:
-                    var_name = '%s%s' % (variables1[n], j)
-                else:
-                    var_name = '%s' % variables1[n]
-                if hermitian is not None and hermitian:
-                    variables2.append(HermitianOperator(var_name))
-                else:
-                    variables2.append(Operator(var_name))
-                variables2[-1].is_commutative = commutative
-        var = np.matrix(np.array(variables2).reshape(n_vars,m_vars))
-        var = np.array(variables2).reshape(n_vars,m_vars)
-        #print(variables1,variables2)
-        return var
-
-    def estimate2(self, x, Y):
-        """Fit Estimator based on NCPOP Regressor model and predict y or produce residuals.
-        The module converts a noncommutative optimization problem provided in SymPy
-        format to an SDPA semidefinite programming problem.
-
-        Parameters
-        ----------
-        x: array
-            Variable seen as cause
-        y: array
-            Variable seen as effect
-
-        Returns
-        -------
-        y_predict: array
-            regression predict values of y or residuals
-        """
-
-        level = 2
-        n = 2
-        # Y = np.transpose(Y)
-        T = len(np.transpose(x))
-        m = len(x)
-
-
-        # Decision Variables
-        A = self.generate_multioperators("A", n_vars=n, m_vars=n, hermitian=True, commutative=False)
-        B = self.generate_multioperators("B", n_vars=m, m_vars=n, hermitian=True, commutative=False)
-        # phi = self.generate_multioperators("phi", n_vars=n, m_vars=T+1, hermitian=True, commutative=False)
-        w = self.generate_multioperators("w", n_vars=n, m_vars=T, hermitian=True, commutative=False)
-        v = self.generate_multioperators("v", n_vars=m, m_vars=T, hermitian=True, commutative=False)
-        f = self.generate_multioperators("f", n_vars=m, m_vars=T, hermitian=True, commutative=False)
-
-        # Objective
-        obj = sum((Y[mm][t]-f[mm][t])*2 for mm in range(m) for t in range(T))
-
-        # Constraints
-        ine1 = [x[nn][t] - A[nn][nn]*x[nn][t-1] - w[nn][t] for nn in range(n) for t in range(1, T)]
-        ine2 = [-x[nn][t] + A[nn][nn]*x[nn][t-1] + w[nn][t] for nn in range(n) for t in range(1, T)]
-        ine3 = [f[mm][t] - B[mm][nn]*x[nn][t] - v[mm][t] for nn in range(n) for t in range(1, T) for mm in range(m)]
-        ine4 = [-f[mm][t] + B[mm][nn]*x[nn][t] + v[mm][t] for nn in range(n) for t in range(1, T) for mm in range(m)]
-        ines = ine1+ine2+ine3+ine4 #+ine5
-
-        # Solve the NCPO
-        variables = [var for array in [A, B, w, v, f] for var in array.flatten()]
-        sdp = SdpRelaxation(variables=variables, verbose=1)
-        # sdp = SdpRelaxation(variables = flatten([A,B,w,v,f]),verbose = 1)
-        sdp.get_relaxation(level, objective=obj, inequalities=ines)
-        sdp.solve(solver='mosek')
-        
-        #with sdp.SolverFactory("mosek") as solver:
-            ## options - MOSEK parameters dictionary, using strings as keys (optional)
-            ## tee - write log output if True (optional)
-            ## soltype - accepts three values : bas, itr and itg for basic,
-            ## interior point and integer solution, respectively. (optional)
-            #solver.solve(model, options = {'dparam.optimizer_max_time':  100.0,
-            #                               'iparam.intpnt_solve_form':   int(mosek.solveform.dual)},
-            #                    tee = True, soltype='itr')
-
-            ## Save data to file (after solve())
-            #solver._solver_model.writedata("dump.task.gz")
-            
-        #sdp.solve(solver='sdpa', solverparameters={"executable":"sdpa_gmp","executable": "C:/Users/zhouq/Documents/sdpa7-windows/sdpa.exe"})
-        print(sdp.primal, sdp.dual, sdp.status)
-
-        if(sdp.status != 'infeasible'):
-            print('ok.')
-            est_noise = []
-            for i in range(T):
-                est_noise.append(sdp[q[i]])
-            print(est_noise)
-            return est_noise
-        else:
-            print('Cannot find feasible solution.')
-            return
-
-    def estimate2_old(self, X, Y):
-        """Fit Estimator based on NCPOP Regressor model and predict y or produce residuals.
-        The module converts a noncommutative optimization problem provided in SymPy
-        format to an SDPA semidefinite programming problem.
-        Define a function for solving the NCPO problems with
-        given standard deviations of process noise and observtion noise,
-        length of  estimation data and required relaxation level.
-
-        Parameters
-        ----------
-        X : array
-            Variable seen as cause
-        Y: array
-            Variable seen as effect
-
-        Returns
-        -------
-        obj: num
-            Objective value in optima
-        y_predict: array
-            regression predict values of y or residuals
-        """
-        n = 2
-        m = 3
-        level = 1
-        T= len(Y)
-        Y = np.transpose(Y)
-        print(n, m, T)
-
-        # Decision Variables
-        A = self.generate_multioperators("A", n_vars=n, m_vars=n, hermitian=True, commutative=False)
-        B = self.generate_multioperators("B", n_vars=m, m_vars=n, hermitian=True, commutative=False)
-        phi = self.generate_multioperators("phi", n_vars=n, m_vars=T+1, hermitian=True, commutative=False)
-        w = self.generate_multioperators("w", n_vars=n, m_vars=T, hermitian=True, commutative=False)
-        v = self.generate_multioperators("v", n_vars=m, m_vars=T, hermitian=True, commutative=False)
-        # f = self.generate_multioperators("f", n_vars=m, m_vars=T, hermitian=True, commutative=False)
-
-
-        # Objective
-        #obj = sum((Y[i]-f[i])**2 for i in range(T)) + 0.0005*sum(p[i]**2 for i in range(T)) + 0.0001*sum(q[i]**2 for i in range(T))
-        obj = sum((Y[mm][t]-f[mm][t])*2 for mm in range(m) for t in range(T))
-        # + 0.0001*sum(w[nn][t]*2 for t in range(T) for nn in range(n))
-        # + 0.0005*sum(v[mm][t]*2 for t in range(T) for mm in range(m))
-
-        # Constraints
-        ine1 = [phi[nn][t+1] - A[nn][nn]*phi[nn][t] - w[nn][t] for nn in range(n) for t in range(T)]
-        ine2 = [-phi[nn][t+1] + A[nn][nn]*phi[nn][t] + w[nn][t] for nn in range(n) for t in range(T)]
-        ine3 = [Y[mm][t] - B[mm][nn]*phi[nn][t+1] - v[mm][t] for nn in range(n) for t in range(T) for mm in range(m)]
-        ine4 = [-Y[mm][t] + B[mm][nn]*phi[nn][t+1] + v[mm][t] for nn in range(n) for t in range(T) for mm in range(m)]
-        ine5 = [w[nn][t]-v[mm][t] for nn in range(n) for t in range(T) for mm in range(m)]
-        ine6 = [w[nn][t]+v[mm][t] for nn in range(n) for t in range(T) for mm in range(m)]
-        ines = ine1+ine2+ine3+ine4+ine5+ine6
-
-        # Solve the NCPO
-        AA = Operator(np.asarray(A).reshape(-1))
-        BB = Operator(np.asarray(B).reshape(-1))
-        # f = Operator(np.asarray(f).reshape(-1))
-        w = Operator(np.asarray(w).reshape(-1))
-        v = Operator(np.asarray(v).reshape(-1))
-        phi = Operator(np.asarray(phi).reshape(-1))
-        #print([Operator(AA),Operator(BB),Operator(f),Operator(p),Operator(phi),Operator(q)])
-
-        sdp = SdpRelaxation(variables = flatten([AA,BB,w,phi,v]),verbose = 1)
-        sdp.get_relaxation(level, objective=obj, inequalities=ines)
-        sdp.solve(solver='mosek')
-
-        sdp.write_to_file("solutions.csv")
-        sdp.write_to_file('example.dat-s')
-        sdp.find_solution_ranks()
-        #sdp.solve(solver='sdpa', solverparameters={"executable":"sdpa_gmp","executable": "C:/Users/zhouq/Documents/sdpa7-windows/sdpa.exe"})
-        print(sdp.primal, sdp.dual,sdp.status)
-        return sdp.primal
-'''    
 
 
 class NCPOLR(object):
@@ -492,10 +250,6 @@ class ANM_NCPO(BaseLearner):
         return flag
 
 
-# Test2
-
-# In[22]:
-
 
 # from castle.algorithms.ncpol._ncpol import NCPOLR,ANM_NCPOP
 from castle.common import GraphDAG
@@ -585,23 +339,7 @@ for i in Datasize:
 df.to_csv('Scores_Krebs_cycle.csv', index=False)
 
 
-                
-
-
-# In[ ]:
-
-
-df_F1 = df['DataSize', 'Timesets', 'Duration', 'F1_Score']
-df_F1.to_csv('Result_Krebs_cycle/F1_Krebs_cycle.csv',index=False)
-
-
-# In[12]:
-
-
-print(truedag)
-
-
-# In[ ]:
+            
 
 
 
